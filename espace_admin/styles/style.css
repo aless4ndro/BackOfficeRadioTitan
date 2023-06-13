@@ -1,0 +1,13 @@
+::after, ::before {
+    box-sizing: border-box;
+}
+
+.navbar {
+    background: linear-gradient(to right, #0e335d 0%,#2989d8 50%,#207cca 51%,#7db9e8 100%);
+    padding: .5rem 1rem;
+}
+
+.navbar-nav .nav-link {
+    color: #fff !important;
+    font-size: 1.2rem;
+}
