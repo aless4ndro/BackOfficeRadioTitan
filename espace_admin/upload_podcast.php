@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 include('config.php');
 if (!$_SESSION['pseudo']) {
@@ -9,6 +13,7 @@ if (isset($_POST['submit'])) {
     $rubrique = $_POST['rubrique'];
     $emission = $_POST['emission'];
     $intervue = $_POST['intervue'];
+    $id_categorie = $_POST['id_categorie'];
     $podcast_title = $_POST['podcast_title']; ///$_POST — HTTP POST variables
     $podcast_file = $_FILES['podcast_file']['name']; //name — Le nom original du fichier, comme sur le disque du visiteur (exemple : mon_icone.png).
     $podcast_file_tmp = $_FILES['podcast_file']['tmp_name']; //tmp_name — Le nom du fichier sur le serveur où le fichier téléchargé a été stocké.
@@ -27,8 +32,8 @@ if (isset($_POST['submit'])) {
                 $podcast_file_name_new = uniqid('', true) . "." . $podcast_file_actual_ext; //uniqid — Génère un identifiant unique basé sur l'heure courante en microsecondes et sur un paramètre binaire optionnel, qui permet de le rendre encore plus unique parceque est important que le nom du fichier soit unique
                 $podcast_file_destination = 'uploads/' . $podcast_file_name_new; //chemin de destination, true = si le dossier n'existe pas, il sera créé
                 move_uploaded_file($podcast_file_tmp, $podcast_file_destination); //move_uploaded_file — Déplace un fichier téléchargé
-                $req = $conn->prepare('INSERT INTO podcast (title, file_path, rubrique, emission, intervue) VALUES (?, ?, ?, ?, ?)');
-                $req->execute([$podcast_title, $podcast_file_destination, $rubrique, $emission, $intervue]); //execute — Exécute une requête préparée
+                $req = $conn->prepare('INSERT INTO podcast (title, file_path, rubrique, emission, intervue, id_categorie) VALUES (?, ?, ?, ?, ?, ?)');
+                $req->execute([$podcast_title, $podcast_file_destination, $rubrique, $emission, $intervue, $id_categorie]); //execute — Exécute une requête préparée
 
                 header('Location: index.php');
             } else {
@@ -59,7 +64,7 @@ if (isset($_POST['submit'])) {
 
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#"><img src="./medias/radiotitanback-end.png" alt="logo" style="width: 105px; border-radius: 50%"></a>
+            <a class="navbar-brand" href="index.php"><img src="./medias/radiotitanback-end.png" alt="logo" style="width: 105px; border-radius: 50%"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -78,7 +83,7 @@ if (isset($_POST['submit'])) {
                     </a>
                 </li>
                 <li>
-                    <a class="nav-link" href="afficher_articles.php">
+                    <a class="nav-link" href="articles.php">
                         <i class="fas fa-book"></i>
                         Afficher les articles
                     </a>
@@ -131,6 +136,8 @@ if (isset($_POST['submit'])) {
                 echo '<audio controls>';
                 echo '<source src="' . $donnees['file_path'] . '" type="audio/mpeg">';
                 echo '</audio>';
+                echo '<a href="delete_podcast.php?id=' . $donnees['id'] . '" class="btn btn-danger">Supprimer</a>';
+                echo '<a href="edit_podcast.php?id=' . $donnees['id'] . '" class="btn btn-warning">Modifier</a>';
                 echo '</div>';
                 echo '</div>';
             }

@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 include('config.php');
 
@@ -8,10 +12,11 @@ if(!$_SESSION['pseudo']) {
 
 if(isset($_POST['valider'])) {
     $titre = htmlspecialchars($_POST['titre']);
-    $contenu = nl2br(htmlspecialchars($_POST['contenu'])) ;
-    if(!empty($titre) AND !empty($contenu)) {
-        $req = $conn->prepare('INSERT INTO articles(titre, contenu) VALUES(?, ?)');
-        $req->execute(array($titre, $contenu));
+    $contenu = nl2br(htmlspecialchars($_POST['contenu']));
+    $id_categorie = htmlspecialchars($_POST['id_categorie']);
+    if(!empty($titre) AND !empty($contenu) AND !empty($id)) {
+        $req = $conn->prepare('INSERT INTO articles(titre, contenu, id_categorie) VALUES(?, ?, ?)');
+        $req->execute(array($titre, $contenu, $id_categorie));
         echo "Votre article a bien été publié";
     } else {
         echo "Veuillez remplir tous les champs";
