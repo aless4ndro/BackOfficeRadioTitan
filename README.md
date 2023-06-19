@@ -8,7 +8,7 @@ Le Dashboard de Titan-Beard est une application de gestion back-office conçue p
 
 2. **Gestion des articles :** Les administrateurs peuvent créer de nouveaux articles, les modifier et les supprimer. Cela offre un contrôle complet sur le contenu du site. Création article avec l'éditeur TinyMCE 'WYSIWYG' What You See Is What You Get
 
-3. **Gestion des albums et des podcasts :** Outre les articles, les administrateurs peuvent également gérer les albums et les podcasts. Ils peuvent créer de nouveaux albums et podcasts, les modifier et les supprimer. Gestion des catégorie.
+3. **Gestion des albums et des podcasts :** Outre les articles, les administrateurs peuvent également gérer les albums et les podcasts. Ils peuvent créer de nouveaux albums et podcasts, les modifier et les supprimer. Gestion des catégories.
 
 4. **Visualisation de la base de données :** Les administrateurs ont une vue d'ensemble de la base de données, leur permettant de comprendre facilement la structure de la base de données et d'effectuer des modifications en conséquence.
 
