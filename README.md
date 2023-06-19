@@ -75,8 +75,6 @@ Start the server
 **Client:** HTML5, CSS3, Bootstrap
 
 **Server:** PHP, MySQL, PHPMYADMIN
-<<<<<<< HEAD
 
 **Design/maquette:** Figma
-=======
->>>>>>> 948f62a9226ad7eaac6744074a199365d22874da
+
