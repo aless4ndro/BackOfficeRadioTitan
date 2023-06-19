@@ -22,3 +22,9 @@ error_reporting(E_ALL);
 ![Screenshot du Dashboard](/espace_admin/img_maquette/dashboard.png)
 
 ![Screenshot du Dashboard](/espace_admin/img_maquette/dashboard1.png)
+
+![Screenshot du Dashboard](/espace_admin/img_maquette/form.png)
+
+![Screenshot du Dashboard](/espace_admin/img_maquette/podcast.png)
+
+![Screenshot du Dashboard](/espace_admin/img_maquette/tiny.png)
