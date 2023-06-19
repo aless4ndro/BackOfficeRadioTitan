@@ -1,7 +1,9 @@
 # Dashboard
 
 Le Dashboard de Titan-Beard est une application de gestion back-office conçue pour le site web titan-beard.com. Cette application offre aux administrateurs du site une interface intuitive et robuste pour gérer les différentes parties du site web.
+
 ## Fonctionnalités principales
+
 1. **Gestion des utilisateurs :** Les administrateurs ont la possibilité de créer, de modifier et de supprimer des utilisateurs. Ils peuvent également attribuer différents rôles aux utilisateurs, tels qu'administrateur, contributeur et utilisateur.
 
 2. **Gestion des articles :** Les administrateurs peuvent créer de nouveaux articles, les modifier et les supprimer. Cela offre un contrôle complet sur le contenu du site. Création article avec l'éditeur TinyMCE 'WYSIWYG' What You See Is What You Get
@@ -28,3 +30,46 @@ error_reporting(E_ALL);
 ![Screenshot du Dashboard](/espace_admin/img_maquette/podcast.png)
 
 ![Screenshot du Dashboard](/espace_admin/img_maquette/tiny.png)
+
+## Color Reference
+## Color Reference
+
+| Color             | Hex                                                                |
+| ----------------- | ------------------------------------------------------------------ |
+| White             | ![#FFFFFF](https://via.placeholder.com/10/FFFFFF?text=+) #FFFFFF |
+| Blue              | ![#0000FF](https://via.placeholder.com/10/0000FF?text=+) #0000FF |
+| Green             | ![#008000](https://via.placeholder.com/10/008000?text=+) #008000 |
+| Orange            | ![#FFA500](https://via.placeholder.com/10/FFA500?text=+) #FFA500 |
+com/10/00b48a?text=+) #00d1a0 |
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/aless4ndro/BackOfficeRadioTitan.git
+```
+
+Go to the project directory
+
+```bash
+  cd 
+```
+
+Install dependencies
+
+```bash
+  Bootstrap cdn
+```
+
+Start the server
+
+```bash
+  php server
+```
+
+## Tech Stack
+
+**Client:** HTML5, CSS3, Bootstrap
+
+**Server:** PHP, MySQL, PHPMYADMIN
