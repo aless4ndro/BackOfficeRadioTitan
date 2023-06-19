@@ -7,7 +7,7 @@ CREATE TABLE membres
 
 create table podcast
 (
-    id int(11) NOT NULL AUTO_INCREMENT,
+    id int NOT NULL AUTO_INCREMENT,
     title varchar(255) NOT NULL,
     file_path varchar(255) NOT NULL,
     rubrique VARCHAR(255),
@@ -18,33 +18,35 @@ create table podcast
 
 create table albums
 (
-    id int(11) NOT NULL AUTO_INCREMENT,
+    id int NOT NULL AUTO_INCREMENT,
     title varchar(255) NOT NULL,
     file_path varchar(255) NOT NULL,
     date DATETIME,
     description varchar(255),
     code_color varchar(255),
     img_illustration varchar(255),
-    PRIMARY KEY (id)
+    PRIMARY KEY (file_path)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 create table categorie
 (
-    id int(11) NOT NULL AUTO_INCREMENT,
+    id_categorie INT PRIMARY KEY,
+    nom_categorie VARCHAR(255) NOT NULL
     title varchar(255) NOT NULL,
     date DATETIME,
     description varchar(255),
     code_color varchar(255),
     img_illustration varchar(255),
-    PRIMARY KEY (id)
+    PRIMARY KEY (id_categorie)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 create table video
 (
+    id int NOT NULL AUTO_INCREMENT,
     fichier_video varchar(255) NOT NULL,
     titre varchar(255) NOT NULL,
     description varchar(255) NOT NULL,
-    PRIMARY KEY (fichier_video)
+    PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -109,3 +111,13 @@ create table video
     PRIMARY KEY (fichier_video),
     FOREIGN KEY (id_categorie) REFERENCES categorie(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+ALTER TABLE articles
+ADD COLUMN id_categorie INT;
+
+
+ALTER TABLE articles
+ADD FOREIGN KEY (id_categorie) REFERENCES categories(id_categorie);

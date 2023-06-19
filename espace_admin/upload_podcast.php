@@ -1,7 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
 session_start();
 include('config.php');
@@ -123,6 +120,15 @@ if (isset($_POST['submit'])) {
                 <label for="intervue" class="form-label">Intervue:</label>
                 <textarea name="intervue" id="intervue" class="form-control"></textarea>
             </div>
+            <select name="id_categorie">
+            <?php
+            $categories = $conn->query("SELECT * FROM categories");
+            while ($categorie = $categories->fetch()) {
+                echo "<option value='" . $categorie['id_categorie'] . "'>" . $categorie['nom_categorie'] . "</option>";
+            }
+            ?>
+
+            <br>
             <input type="submit" name="submit" value="Upload" class="btn btn-primary">
 
             <?php

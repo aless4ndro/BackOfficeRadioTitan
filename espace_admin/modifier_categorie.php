@@ -2,87 +2,78 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
 session_start();
 include('config.php');
 
-if(!isset($_SESSION['pseudo'])) {
+if (!isset($_SESSION['pseudo']) || empty($_SESSION['pseudo'])) {
     header('Location: connexion.php');
     exit;
 }
 
-if(isset($_GET['id']) && !empty($_GET['id'])) {
-    $getid = $_GET['id'];
+if(isset($_GET['id']) && trim($_GET['id']) != '') {
+    $getid = intval($_GET['id']);
 
-    $req = $conn->prepare('SELECT * FROM categorie WHERE id = ?');
+    $req = $conn->prepare('SELECT * FROM categories WHERE id_categorie = ?');
     $req->execute(array($getid));
     if($req->rowCount() == 1) {
         $donnees = $req->fetch();
-    } else {
-        die("Cet article n'existe pas");
-    }
-} else {
-    die("L'id n'est pas recuperé");
-}
+        if(isset($_POST['submit'])) {
+            $nom_categorie = htmlspecialchars($_POST['nom_categorie']);
 
-if(isset($_POST['valider'])) {
-    $title = htmlspecialchars($_POST['title']);
-    $date = htmlspecialchars($_POST['date']);
-    $description = nl2br(htmlspecialchars($_POST['description']));
-    $code_color = htmlspecialchars($_POST['code_color']);
-}
-    
-
-    if (isset($_FILES['img_illustration']) && $_FILES['img_illustration']['error'] == 0) {
-        $tmpName = $_FILES['img_illustration']['tmp_name'];
-        $name = $_FILES['img_illustration']['name'];
-        $size = $_FILES['img_illustration']['size'];
-        $error = $_FILES['img_illustration']['error'];
-
-        $tabExtension = explode('.', $name);
-        $extension = strtolower(end($tabExtension));
-
-        $extensions = ['jpg', 'png', 'jpeg', 'gif'];
-
-        $maxSize = 4000000;
-
-        if (in_array($extension, $extensions) && $size <= $maxSize) {
-            $uniqueName = uniqid('', true);
-            $file = $uniqueName . "." . $extension;
-            move_uploaded_file($tmpName, './img_categorie/' . $file);
-            $img_illustration = './img_categorie/' . $file;
-        } else {
-            die('Le fichier n\'est pas une image ou il est trop gros');
+            if(!empty($nom_categorie)) {
+                $req = $conn->prepare('UPDATE categories SET nom_categorie = ? WHERE id_categorie = ?');
+                $req->execute(array($nom_categorie, $getid));
+                header('Location: edit_categorie.php');
+            } else {
+                echo "Veuillez remplir tous les champs";
+            }
         }
     } else {
-        die('Fichier non uploadé');
+        echo "Cette categorie n'existe pas";
     }
+}
 
-    if(!empty($title) AND !empty($date) AND !empty($description) AND !empty($code_color) AND !empty($img_illustration)) {
-        $req = $conn->prepare('UPDATE categorie SET title = ?, date = ?, description = ?, code_color = ?, img_illustration = ? WHERE id = ?');
-        $req->execute(array($title, $date, $description, $code_color, $img_illustration, $getid));
-        header('Location: categories.php');
-        exit;
-    } else {
-        echo "Veuillez remplir tous les champs";
-    }
-
+$req = $conn->query('SELECT * FROM categories');
+$categories = $req->fetchAll();
 ?>
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Modifier une catégorie</title>
+    <title>Modifier Categorie</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="./styles/style.css">
 </head>
 <body>
-    <form method="POST" enctype="multipart/form-data">
-        <input type="text" name="title" placeholder="Titre" value="<?php echo $donnees['title']; ?>" required><br>
-        <input type="date" name="date" value="<?php echo $donnees['date']; ?>" required><br>
-        <textarea name="description" placeholder="Description" required><?php echo $donnees['description']; ?></textarea><br>
-        <input type="color" name="code_color" value="<?php echo $donnees['code_color']; ?>" required><br>
-        <input type="file" name="img_illustration" required><br>
-        <input type="submit" name="valider">
-    </form>
+    <div class="container mt-5">
+        <?php foreach($categories as $categorie): ?>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title"><?= htmlspecialchars($categorie['nom_categorie']); ?></h5>
+                    <a href="?id=<?= $categorie['id_categorie']; ?>" class="btn btn-primary">Modifier cette categorie</a>
+                </div>
+            </div>
+        <?php endforeach; ?>
+
+        <?php if(isset($_GET['id']) and !empty($_GET['id'])): ?>
+            <form method="POST" action="">
+                <div class="form-group">
+                    <label for="nom_categorie">Nom Categorie</label>
+                    <input type="text" class="form-control" id="nom_categorie" name="nom_categorie" placeholder="Nom Categorie" value="<?php echo $donnees['nom_categorie']; ?>">
+                </div>
+                <button type="submit" class="btn btn-primary mt-3" name="submit">Modifier</button>
+            </form>
+        <?php endif; ?>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
 </body>
 </html>
 
+<!--Dans ce code, une liste de toutes les catégories est affichée avec un bouton pour modifier chaque catégorie. Lorsque vous cliquez sur le bouton de modification d'une catégorie, vous êtes redirigé vers la même page,
+mais avec l'ID de la catégorie en paramètre GET dans l'URL. Si cet ID est défini et n'est pas vide,
+alors le formulaire de modification de la catégorie apparaît avec le nom de la catégorie déjà rempli. Si vous soumettez le formulaire, le nom de la catégorie sera mis à jour dans la base de données.-->

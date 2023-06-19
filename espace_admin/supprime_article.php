@@ -1,6 +1,10 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 session_start();
 include('config.php');
+require('permission_admin.php');
 
 if(isset($_GET['id']) and !empty($_GET['id'])) {
     $getid = $_GET['id'];
@@ -9,7 +13,8 @@ if(isset($_GET['id']) and !empty($_GET['id'])) {
     if($req->rowCount() > 0) {
         $delete = $conn->prepare('DELETE FROM articles WHERE id = ?');
         $delete->execute(array($getid));
-        header('Location: articles.php');
+        echo "L'article a bien été supprimé";
+        echo "<a href='./Back-end/index.php'>Retour à l'accueil</a>";
     } else {
         echo "Cet article n'existe pas";
     }

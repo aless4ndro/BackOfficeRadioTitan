@@ -1,6 +1,7 @@
 <?php   
 session_start();
 include('config.php');
+require('permission_admin.php');
 
 if(isset($_GET['id']) and !empty($_GET['id'])) {
     $getid = $_GET['id'];
@@ -9,7 +10,8 @@ if(isset($_GET['id']) and !empty($_GET['id'])) {
     if($req->rowCount() > 0) {//si l'id existe
         $delete = $conn->prepare('DELETE FROM membres WHERE id = ?');
         $delete->execute(array($getid));
-        header('Location: membres.php');
+        echo "Le membre a bien été supprimé";
+        echo "<a href='./Back-end/index.php'>Retour à l'accueil</a>";
     } else {
         echo "Ce membre n'existe pas";
     }

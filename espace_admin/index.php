@@ -40,7 +40,7 @@ if(!$_SESSION['pseudo']) {
                         <a class="nav-link" href="modifier_categorie.php">Catégorie</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="./Back-end/index.php">index.php</a>
+                        <a class="nav-link" href="./Back-end/index.php">dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="upload_album.php">upload_album</a>
