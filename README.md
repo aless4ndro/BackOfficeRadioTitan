@@ -53,19 +53,19 @@ Clone the project
 Go to the project directory
 
 ```bash
-  cd 
+  cd espace_admin
 ```
 
 Install dependencies
 
 ```bash
-  Bootstrap cdn
+  Bootstrap cdn version 4.3.0 and 5.3.0
 ```
 
 Start the server
 
 ```bash
-  php server
+  extension vscode php server
 ```
 
 ## Tech Stack
