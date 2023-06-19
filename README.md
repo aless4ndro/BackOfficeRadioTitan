@@ -31,6 +31,8 @@ error_reporting(E_ALL);
 
 ![Screenshot du Dashboard](/espace_admin/img_maquette/tiny.png)
 
+![Screenshot du Dashboard](/espace_admin/img_maquette/maquette.png)
+
 ## Color Reference
 ## Color Reference
 
@@ -73,3 +75,5 @@ Start the server
 **Client:** HTML5, CSS3, Bootstrap
 
 **Server:** PHP, MySQL, PHPMYADMIN
+
+**Design/maquette:** Figma
