@@ -39,6 +39,29 @@ error_reporting(E_ALL);
 
 ![Screenshot du Dashboard](/espace_admin/img_maquette/mobil2.png)
 
+## Connexion à la BDD
+
+Config.php
+
+```bash
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "my-secret-pw";
+$dbname = "espace_admin_altameos";
+
+try {
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+ 
+} catch (PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
+}
+?>
+```
+
+![Screenshot du Dashboard](/espace_admin/img_maquette/bdd.png)
+
 ## Color Reference
 ## Color Reference
 
