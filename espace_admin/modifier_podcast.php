@@ -1,7 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 session_start();
 include('config.php');
 
@@ -35,25 +32,25 @@ if(isset($_GET['id']) && trim($_GET['id']) != '') {
 
 $req = $conn->query('SELECT * FROM podcast');
 $podcasts = $req->fetchAll();
-?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
+
+?>
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modifier Podcast</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-</head>
-<body>
+    <title>Modifier podcast</title>
+ </head>
+<?php include('./include/header.php'); ?>
     <?php foreach($podcasts as $podcast): ?>
         <div class="container mt-4">
             <h2><?= htmlspecialchars($podcast['title']); ?></h2>
             <p><?= nl2br(htmlspecialchars($podcast['file_path'])); ?></p>
-            <p><?= nl2br(htmlspecialchars($podcast['rubrique'])); ?></p>
-            <p><?= nl2br(htmlspecialchars($podcast['emission'])); ?></p>
-            <p><?= nl2br(htmlspecialchars($podcast['intervue'])); ?></p>
-            <p><?= nl2br(htmlspecialchars($podcast['id_categorie'])); ?></p>
+            <p>Rubrique: <strong><?= nl2br(htmlspecialchars($podcast['rubrique'])); ?></p></strong>
+            <p>Emission: <strong><?= nl2br(htmlspecialchars($podcast['emission'])); ?></p></strong>
+            <p>Intervue: <strong><?= nl2br(htmlspecialchars($podcast['intervue'])); ?></p></strong>
+            <p>Catégorie: <strong><?= nl2br(htmlspecialchars($podcast['id_categorie'])); ?></p></strong>
             <a href="?id=<?= $podcast['id']; ?>" class="btn btn-primary">Modifier ce podcast</a>
         </div>
         <hr>
@@ -64,7 +61,7 @@ $podcasts = $req->fetchAll();
             <form method="POST" action="">
                 <div class="form-group">
                     <label for="title">Titre</label>
-                    <input type="text" class="form-control" id="title" name="title" placeholder="Titre" value="<?php echo $donnees['title']; ?>">
+                    <input type="text" class="form-control" id="title" name="title" placeholder="Titre" value="<?php echo $donnees['title']; ?>"><!-- title est une colonne de la bdd elle est initie par $titre qui vaut title $titre = htmlspecialchars($_POST['title']); on faison cela dans notre placeholder on aura les donnees du podcast selectionne  -->
                 </div>
                 <div class="form-group">
                     <label for="file_path">File Path</label>
@@ -90,8 +87,4 @@ $podcasts = $req->fetchAll();
             </form>
         </div>
     <?php endif; ?>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-</body>
-</html>
+   <?php include('./include/footer.php');?>

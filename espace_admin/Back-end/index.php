@@ -144,7 +144,7 @@ if (isset($_SESSION['pseudo'])) {
           <a class="nav-link" data-bs-toggle="collapse" href="#membres" aria-expanded="false" aria-controls="membres">
             <span class="menu-title">Membres</span>
             <i class="menu-arrow"></i>
-            <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+            <i class="mdi mdi-account-group menu-icon"></i>
           </a>
           <div class="collapse" id="membres">
             <ul class="nav flex-column sub-menu">
@@ -169,7 +169,7 @@ if (isset($_SESSION['pseudo'])) {
           <a class="nav-link" data-bs-toggle="collapse" href="#podcasts" aria-expanded="false" aria-controls="podcasts">
             <span class="menu-title">Podcast</span>
             <i class="menu-arrow"></i>
-            <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+            <i class="mdi mdi-podcast menu-icon"></i>
           </a>
           <div class="collapse" id="podcasts">
             <ul class="nav flex-column sub-menu">
@@ -182,7 +182,7 @@ if (isset($_SESSION['pseudo'])) {
           <a class="nav-link" data-bs-toggle="collapse" href="#albums" aria-expanded="false" aria-controls="albums">
             <span class="menu-title">Albums</span>
             <i class="menu-arrow"></i>
-            <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+            <i class="mdi mdi-album menu-icon"></i>
           </a>
           <div class="collapse" id="albums">
             <ul class="nav flex-column sub-menu">
@@ -195,7 +195,7 @@ if (isset($_SESSION['pseudo'])) {
           <a class="nav-link" data-bs-toggle="collapse" href="#categories" aria-expanded="false" aria-controls="categories">
             <span class="menu-title">Catégories</span>
             <i class="menu-arrow"></i>
-            <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+            <i class="mdi mdi-format-list-bulleted-type menu-icon"></i>
           </a>
           <div class="collapse" id="categories">
             <ul class="nav flex-column sub-menu">

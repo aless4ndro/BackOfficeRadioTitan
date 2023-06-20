@@ -27,6 +27,8 @@ if(isset($_GET['id']) && trim($_GET['id']) != '') {
     }
 }
 
+include('include/header.php');
+
 $req = $conn->query('SELECT * FROM articles');
 while ($donnees = $req->fetch()) {
     echo '<h2>'.htmlspecialchars($donnees['titre']).'</h2>';
@@ -36,47 +38,33 @@ while ($donnees = $req->fetch()) {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modifier l'article</title>
-    <!-- Inclure les fichiers CSS de Bootstrap -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-</head>
-<body>
-    <?php foreach($articles as $article): ?>
-        <div class="container mt-4">
-            <h2><?= htmlspecialchars($article['titre']); ?></h2>
-            <p><?= nl2br(htmlspecialchars($article['contenu'])); ?></p>
-            <a href="?id=<?= $article['id']; ?>" class="btn btn-primary">Modifier cet article</a>
-        </div>
-        <hr>
-    <?php endforeach; ?>
 
-    <?php if(isset($_GET['id']) and !empty($_GET['id'])): ?>
-        <!-- Formulaire de modification de l'article avec les classes Bootstrap -->
-        <div class="container mt-4">
-            <form method="POST" action="">
-                <div class="form-group">
-                    <label for="titre">Titre</label>
-                    <input type="text" class="form-control" id="titre" name="titre" placeholder="Titre" value="<?php echo $donnees['titre']; ?>">
-                </div>
-                <div class="form-group">
-                    <label for="contenu">Contenu</label>
-                    <textarea class="form-control" id="contenu" name="contenu" placeholder="Contenu"><?php echo $donnees['contenu']; ?></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary" name="valider">Valider</button>
-            </form>
-        </div>
-    <?php endif; ?>
+<?php foreach($articles as $article): ?>
+    <div class="container mt-4">
+        <h2><?= htmlspecialchars($article['titre']); ?></h2>
+        <p><?= nl2br(htmlspecialchars($article['contenu'])); ?></p>
+        <a href="?id=<?= $article['id']; ?>" class="btn btn-primary">Modifier cet article</a>
+    </div>
+    <hr>
+<?php endforeach; ?>
 
-    <!-- Inclure les fichiers JS de Bootstrap -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-</body>
-</html>
+<?php if(isset($_GET['id']) and !empty($_GET['id'])): ?>
+    <!-- Formulaire de modification de l'article avec les classes Bootstrap -->
+    <div class="container mt-4">
+        <form method="POST" action="">
+            <div class="mb-3">
+                <label for="titre" class="form-label">Titre</label>
+                <input type="text" class="form-control" id="titre" name="titre" placeholder="Titre" value="<?php echo $donnees['titre']; ?>">
+            </div>
+            <div class="mb-3">
+                <label for="contenu" class="form-label">Contenu</label>
+                <textarea class="form-control" id="contenu" name="contenu" placeholder="Contenu"><?php echo $donnees['contenu']; ?></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" name="valider">Valider</button>
+        </form>
+    </div>
+<?php endif; ?>
+<?php include('include/footer.php'); ?>
 
 
 <!--Donc, en résumé, cette page peut être utilisée à la fois pour afficher une liste de tous les articles avec des liens pour les modifier, et pour afficher et traiter un formulaire de modification pour un article spécifique.--
