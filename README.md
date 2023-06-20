@@ -17,9 +17,11 @@ docker-compose up -d
 mysql -u root -pmy-secret-pw
 
 Debeug:
-ini_set('display_errors', 1);
+```bash
+ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+```
 
 ![Screenshot du Dashboard](/espace_admin/img_maquette/dashboard.png)
 
@@ -79,8 +81,6 @@ Start the server
 **Client:** HTML5, CSS3, Bootstrap
 
 **Server:** PHP, MySQL, PHPMYADMIN
-<<<<<<< HEAD
 
 **Design/maquette:** Figma
-=======
->>>>>>> 948f62a9226ad7eaac6744074a199365d22874da
+
