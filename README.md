@@ -33,6 +33,10 @@ error_reporting(E_ALL);
 
 ![Screenshot du Dashboard](/espace_admin/img_maquette/maquette.png)
 
+![Screenshot du Dashboard](/espace_admin/img_maquette/mobil.png)
+
+![Screenshot du Dashboard](/espace_admin/img_maquette/mobil2.png)
+
 ## Color Reference
 ## Color Reference
 
