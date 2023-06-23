@@ -17,21 +17,22 @@ if (isset($_POST['valider'])) {
         // Interroger la base de données pour l'utilisateur
         $stmt = $conn->prepare("SELECT * FROM membres WHERE pseudo = ?");
         $stmt->execute([$pseudo_saisi]);
-        $user = $stmt->fetch(); 
+        $user = $stmt->fetch();
 
-        if ($user && password_verify($password_saisi, $user['pass'])) { 
+        if ($user && password_verify($password_saisi, $user['pass'])) {
             // Le pseudo et le mot de passe sont corrects
-            $_SESSION['pseudo'] = $pseudo_saisi;
-            $_SESSION['role'] = $user['role'];
-            header('Location: /espace_admin/Back-end/index.php');
-            exit;
+                $_SESSION['pseudo'] = $pseudo_saisi;
+                $_SESSION['role'] = $user['role'];
+                $_SESSION['id'] = $user['id'];
+                header('Location: /espace_admin/Back-end/index.php');
+                exit;
+            } else {
+                echo "Mauvais pseudo ou mot de passe";
+            }
         } else {
-            echo "Mauvais pseudo ou mot de passe";
+            echo "Veuillez remplir tous les champs";
         }
-    } else {
-        echo "Veuillez remplir tous les champs";
     }
-}
 ?>
 
 

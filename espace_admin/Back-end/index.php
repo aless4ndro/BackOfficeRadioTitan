@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 $servername = "localhost";
@@ -200,7 +201,7 @@ if (isset($_SESSION['pseudo'])) {
           <div class="collapse" id="categories">
             <ul class="nav flex-column sub-menu">
               <li class="nav-item"> <a class="nav-link" href="../edit_categorie.php">Créer une categorie</a></li>
-              <li class="nav-item"> <a class="nav-link" href="../modifier_ctegorie.php">Modifier une categorie</a></li>
+              <li class="nav-item"> <a class="nav-link" href="../modifier_categorie.php">Modifier une categorie</a></li>
             </ul>
           </div>
         </li>
@@ -236,7 +237,7 @@ if (isset($_SESSION['pseudo'])) {
                   ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                       <?= htmlspecialchars($donnees['pseudo']); ?> (<?= htmlspecialchars($donnees['role']); ?>)
-                      <?php if ($donnees['pseudo'] !== $_SESSION['pseudo']) { ?>
+                      <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin') { ?>
                         <a href="/espace_admin/delete.php?id=<?php echo $donnees['id']; ?>" class="badge badge-danger badge-pill">
                           <i class="fas fa-trash-alt mr-3"></i>
                         </a>
@@ -261,7 +262,7 @@ if (isset($_SESSION['pseudo'])) {
                   ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                       <?= htmlspecialchars($donnees['titre']); ?>
-                      <?php if ($donnees['titre'] !== $_SESSION['titre']) { ?>
+                      <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin') { ?>
                         <a href="/espace_admin/supprime_article.php?id=<?php echo $donnees['id']; ?>" class="badge badge-danger badge-pill">
                           <i class="fas fa-trash-alt mr-3"></i>
                         </a>
@@ -286,7 +287,7 @@ if (isset($_SESSION['pseudo'])) {
                   ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                       <?= htmlspecialchars($donnees['title']); ?>
-                      <?php if ($donnees['title'] !== $_SESSION['title']) { ?>
+                      <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin') { ?>
                         <a href="/espace_admin/delete_podcast.php?id=<?php echo $donnees['id']; ?>" class="badge badge-danger badge-pill">
                           <i class="fas fa-trash-alt mr-3"></i>
                         </a>
@@ -311,15 +312,14 @@ if (isset($_SESSION['pseudo'])) {
                   ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                       <?= htmlspecialchars($donnees['title']); ?>
-                      <?php if ($donnees['title'] !== $_SESSION['title']) { ?>
+                      <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin') { ?>
                         <a href="/espace_admin/delete_albums.php?id=<?php echo $donnees['id']; ?>" class="badge badge-danger badge-pill">
                           <i class="fas fa-trash-alt mr-3"></i>
                         </a>
                       <?php } ?>
                     </li>
-                  <?php
-                  }
-                  ?>
+                  <?php } ?>
+
                 </ul>
               </div>
             </div>
@@ -336,7 +336,7 @@ if (isset($_SESSION['pseudo'])) {
                   ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                       <?= htmlspecialchars($donnees['nom_categorie']); ?>
-                      <?php if ($donnees['nom_categorie'] !== $_SESSION['nom_categorie']) { ?>
+                      <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin') { ?>
                         <a href="/espace_admin/delete_categorie.php?id_categorie=<?php echo $donnees['id_categorie']; ?>" class="badge badge-danger badge-pill">
                           <i class="fas fa-trash-alt mr-3"></i>
                         </a>
@@ -350,85 +350,118 @@ if (isset($_SESSION['pseudo'])) {
             </div>
           </div>
         </div>
-       
+
+        <?php
+
+
+        $articles = [];
+
+        // If the user is an admin, display all unapproved articles
+        if ($_SESSION['role'] == 'admin') {
+          $req = $conn->prepare("SELECT articles.*, membres.pseudo /*Select all articles and their authors*/
+          FROM articles 
+          INNER JOIN membres ON articles.id_membre = membres.id /*Join the articles table with the membres table*/
+          WHERE articles.is_approved = 0"); // Select only unapproved articles
+          $req->execute();
+          $articles = $req->fetchAll();
+        }
+
+        ?>
         <div class="row">
           <div class="col-md-7 grid-margin stretch-card">
             <div class="card">
               <div class="card-body">
-                
-                  
+                <h4 class="card-title">Articles en attente d'approbation</h4>
+                  <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
               </div>
+              
+              
+              <?php foreach ($articles as $article) : ?>
+                <div class="article">
+                  <h5><?php echo "Titre : " . htmlspecialchars($article['titre']); ?></h5>
+                  <p><?php print "Contenu : " . $article['contenu']; ?></p>
+                  <p><?php echo "Auteur : " . htmlspecialchars($article['pseudo']); ?></p>
+                  <a href="/espace_admin/publier_article.php?id=<?php echo $article['id']; ?>" class="btn btn-success">Approuver</a>
+                  <a href="/espace_admin/supprime_article.php?id=<?php echo $article['id']; ?>" class="btn btn-danger">Supprimer</a>
+                </div>
+                <hr>
+              <?php endforeach; ?>
+
             </div>
           </div>
-          <div class="col-md-5 grid-margin stretch-card">
-            <div class="card">
-              <div class="card-body">
-                <h4 class="card-title text-white">Todo</h4>
-                <div class="add-items d-flex">
-                  <input type="text" class="form-control todo-list-input" placeholder="What do you need to do today?">
-                  <button class="add btn btn-gradient-primary font-weight-bold todo-list-add-btn" id="add-task">Add</button>
-                </div>
-                <div class="list-wrapper">
-                  <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
-                    <li>
-                      <div class="form-check">
-                        <label class="form-check-label">
-                          <input class="checkbox" type="checkbox"> Meeting with Alisa </label>
-                      </div>
-                      <i class="remove mdi mdi-close-circle-outline"></i>
-                    </li>
-                    <li class="completed">
-                      <div class="form-check">
-                        <label class="form-check-label">
-                          <input class="checkbox" type="checkbox" checked> Call John </label>
-                      </div>
-                      <i class="remove mdi mdi-close-circle-outline"></i>
-                    </li>
-                    <li>
-                      <div class="form-check">
-                        <label class="form-check-label">
-                          <input class="checkbox" type="checkbox"> Create invoice </label>
-                      </div>
-                      <i class="remove mdi mdi-close-circle-outline"></i>
-                    </li>
-                    <li>
-                      <div class="form-check">
-                        <label class="form-check-label">
-                          <input class="checkbox" type="checkbox"> Print Statements </label>
-                      </div>
-                      <i class="remove mdi mdi-close-circle-outline"></i>
-                    </li>
-                    <li class="completed">
-                      <div class="form-check">
-                        <label class="form-check-label">
-                          <input class="checkbox" type="checkbox" checked> Prepare for presentation </label>
-                      </div>
-                      <i class="remove mdi mdi-close-circle-outline"></i>
-                    </li>
-                    <li>
-                      <div class="form-check">
-                        <label class="form-check-label">
-                          <input class="checkbox" type="checkbox"> Pick up kids from school </label>
-                      </div>
-                      <i class="remove mdi mdi-close-circle-outline"></i>
-                    </li>
-                  </ul>
-                </div>
+        </div>
+        <div class="col-md-5 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title text-white">Todo</h4>
+              <div class="add-items d-flex">
+                <input type="text" class="form-control todo-list-input" placeholder="What do you need to do today?">
+                <button class="add btn btn-gradient-primary font-weight-bold todo-list-add-btn" id="add-task">Add</button>
+              </div>
+              <div class="list-wrapper">
+                <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
+                  <li>
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input class="checkbox" type="checkbox"> Meeting with Alisa </label>
+                    </div>
+                    <i class="remove mdi mdi-close-circle-outline"></i>
+                  </li>
+                  <li class="completed">
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input class="checkbox" type="checkbox" checked> Call John </label>
+                    </div>
+                    <i class="remove mdi mdi-close-circle-outline"></i>
+                  </li>
+                  <li>
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input class="checkbox" type="checkbox"> Create invoice </label>
+                    </div>
+                    <i class="remove mdi mdi-close-circle-outline"></i>
+                  </li>
+                  <li>
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input class="checkbox" type="checkbox"> Print Statements </label>
+                    </div>
+                    <i class="remove mdi mdi-close-circle-outline"></i>
+                  </li>
+                  <li class="completed">
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input class="checkbox" type="checkbox" checked> Prepare for presentation </label>
+                    </div>
+                    <i class="remove mdi mdi-close-circle-outline"></i>
+                  </li>
+                  <li>
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input class="checkbox" type="checkbox"> Pick up kids from school </label>
+                    </div>
+                    <i class="remove mdi mdi-close-circle-outline"></i>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <!-- content-wrapper ends -->
-      <!-- partial:partials/_footer.html -->
-      <footer class="footer">
-        <div class="container-fluid d-flex justify-content-between">
-          <span class="text-muted d-block text-center text-sm-start d-sm-inline-block">Copyright © Altameos 2023</span>
-        </div>
-      </footer>
-      <!-- partial -->
     </div>
-    <!-- main-panel ends -->
+    <!-- content-wrapper ends -->
+    <!-- partial:partials/_footer.html -->
+    <footer class="footer">
+      <div class="container-fluid d-flex justify-content-between">
+        <span class="text-muted d-block text-center text-sm-start d-sm-inline-block">Copyright © Altameos 2023</span>
+      </div>
+    </footer>
+    <!-- partial -->
+  </div>
+  <!-- main-panel ends -->
   </div>
   <!-- page-body-wrapper ends -->
   </div>

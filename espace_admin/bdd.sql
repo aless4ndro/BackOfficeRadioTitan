@@ -187,6 +187,8 @@ INSERT INTO `categories` (`id_categorie`, `nom_categorie`) VALUES
 >>>>>>> 25111a9a72935f56c12465047c36b9ed71f6c99e
 -- --------------------------------------------------------
 
+INSERT INTO `categories` (`id_categorie`, `nom_categorie`) VALUES
+(1, 'Article')
 --
 -- Structure de la table `membres`
 --

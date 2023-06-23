@@ -12,7 +12,7 @@ if (isset($_POST['submit'])) {
     if (!empty($nom_categorie)) {
         $req = $conn->prepare('INSERT INTO categories (nom_categorie) VALUES (?)');
         $req->execute([$nom_categorie]);
-        header('Location: index.php');
+        header('Location: ../../index.php');
         exit;
     } else {
         echo "Le champ est vide";

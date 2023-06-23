@@ -19,7 +19,7 @@
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <ul class="navbar-nav">
                     <li>
-                    <a class="nav-link" href="membres.php">
+                    <a class="nav-link" href="creation_membre.php">
                         <i class="fas fa-users"></i>
                         Membres
                     </a>
