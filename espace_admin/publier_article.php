@@ -43,18 +43,13 @@ if (isset($_POST['valider'])) {
         $req = $conn->prepare('INSERT INTO articles(titre, contenu, id_categorie, id_membre, is_approved) VALUES(?, ?, ?, ?, ?)');
         $req->execute(array($titre, $contenu, $id_categorie, $id_membre, $is_approved));
 
-        $_SESSION['message'] = "Votre article a bien été publié";
+        $_SESSION['message'] = "Votre opération a été conclue avec succès.";//variable de session qui permet d'afficher un message de confirmation dans index.php
+        header('Location: ./Back-end/index.php');
+        exit();
     } else {
         $_SESSION['message'] = "Veuillez remplir tous les champs";
     }
 }
-
-
-if (isset($_SESSION['message'])) {
-    echo $_SESSION['message'];
-    $_SESSION['message'] = '';  // Clear the message after displaying it
-}
-
 
 include('./include/header.php');
 
@@ -65,6 +60,13 @@ include('./include/header.php');
 // S'il y a des données POST (c'est-à-dire si l'utilisateur a soumis le formulaire), il récupère ces données, les échappe pour empêcher les attaques XSS, et utilise HTMLPurifier pour nettoyer le contenu de toute balise HTML dangereuse.
 // Il vérifie si tous les champs requis sont remplis. Si c'est le cas, il insère le nouvel article dans la base de données. Sinon, il affiche un message d'erreur.
 // Si un message est stocké dans $_SESSION['message'], il l'affiche et le supprime ensuite.
+
+
+// En stockant le message dans la variable de session $_SESSION['message'], vous permettez au message d'être disponible pour la prochaine demande HTTP. C'est utile par exemple lorsque vous redirigez l'utilisateur vers une autre page après avoir traité un formulaire, et que vous voulez afficher un message sur cette autre page.
+
+// Dans notre cas, vous affichez immédiatement le message dans la même requête HTTP où il a été défini. Donc, techniquement, vous n'auriez pas besoin d'utiliser $_SESSION['message'] pour cela, vous pourriez simplement utiliser une variable régulière comme $message. Cependant, utiliser $_SESSION['message'] ne fait pas de mal et pourrait être utile si vous décidez plus tard de rediriger l'utilisateur après l'insertion de l'article.
+
+// Notez que vous réinitialisez $_SESSION['message'] à une chaîne vide après l'avoir affiché. C'est une bonne pratique car cela garantit que le message n'est affiché qu'une seule fois. Si vous ne le faisiez pas, le même message serait affiché à nouveau pour la prochaine requête HTTP, ce qui serait probablement déroutant pour l'utilisateur.
 ?>
 
 

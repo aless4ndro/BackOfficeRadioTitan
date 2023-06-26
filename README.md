@@ -26,9 +26,7 @@ error_reporting(E_ALL);
 
 ![Screenshot du Dashboard](/espace_admin/img_maquette/dashboard.png)
 
-![Screenshot du Dashboard](/espace_admin/img_maquette/dashboard1.png)
-
-![Screenshot du Dashboard](/espace_admin/img_maquette/dashboard3.png)
+![Screenshot du Dashboard](/espace_admin/img_maquette/dashboard2.png)
 
 ![Screenshot du Dashboard](/espace_admin/img_maquette/form.png)
 
@@ -50,7 +48,7 @@ Config.php
 <?php
 $servername = "localhost";
 $username = "root";
-$password = "my-secret-pw";
+$password = "";
 $dbname = "espace_admin_altameos";
 
 try {
@@ -331,6 +329,94 @@ sudo apt-get install php-gd
 
 ![Screenshot du Dashboard](/espace_admin/img_maquette/captcha.png)
 
+### Mise a jour suppresion article dans la liste d'articles avec ajax
+
+```bash
+$(".delete-btn").click(function(e) {// on écoute l'événement "click" sur le bouton
+    e.preventDefault();  // empêche le bouton de soumettre le formulaire
+
+    var articleId = $(this).data("data_id");  // récupère l'ID de l'article du bouton
+
+    $.ajax({// requête AJAX en mode GET
+        url: "/espace_admin/publier_article.php",
+        type: "POST",
+        data: {
+            id: articleId // on envoie l'ID de l'article au fichier de traitement
+        },
+        success: function(data) {
+            // code à exécuter lorsque la requête réussit
+            // par exemple, vous pourriez supprimer l'article de la liste ici
+            $("#list-item" + articleId).remove();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {// code à exécuter en cas d'erreur
+            // code à exécuter en cas d'erreur
+            console.error(textStatus, errorThrown);// on affiche la réponse du serveur dans la console
+        }
+    });
+});
+
+
+<li class="list-group-item d-flex justify-content-between align-items-center" id="list-item-<?php echo $donnees['id']; ?>">
+
+
+<a href="#" data-id="<?php echo $article['id']; ?>" class="btn btn-danger delete-btn">Supprimer</a>
+```
+
+### Explication du code
+
+```bash
+$(".delete-btn").click(function(e) { ... })
+```
+
+Ici, on attache un gestionnaire d'événement click aux éléments de la page HTML avec la classe delete-btn.
+function(e) {...} est la fonction qui est appelée chaque fois qu'un clic est effectué sur un élément avec la classe delete-btn.
+e est l'objet événement qui contient des informations sur l'événement de clic, comme le bouton de la souris qui a été cliqué, l'élément qui a été cliqué, etc.
+e.preventDefault(); :
+
+Cette ligne empêche le comportement par défaut du navigateur lorsqu'un clic est effectué sur un élément avec la classe delete-btn. En l'occurrence, comme il s'agit d'un lien
+
+```bash
+<a>
+```
+
+, cela empêche la navigation vers l'URL spécifiée dans l'attribut href.
+var articleId = $(this).data("id"); :
+
+$(this) fait référence à l'élément HTML qui a été cliqué.
+La méthode data("id") récupère la valeur de l'attribut data-id de l'élément cliqué, qui est l'ID de l'article.
+$.ajax({ ... }) :
+
+Cette méthode jQuery effectue une requête HTTP asynchrone. Les détails de la requête (comme l'URL à appeler, le type de requête, les données à envoyer, etc.) sont spécifiés dans l'objet passé en argument.
+url: "/espace_admin/publier_article.php" :
+
+C'est l'URL vers laquelle la requête AJAX est effectuée.
+type: "POST", :
+
+C'est le type de requête HTTP. Ici, il s'agit d'une requête POST, qui est généralement utilisée pour envoyer des données au serveur.
+data: { id: articleId }, :
+
+Les données à envoyer avec la requête. Ici, on envoie l'ID de l'article sous forme d'un objet : { id: articleId }.
+success: function(data) { ... }, et error: function(jqXHR, textStatus, errorThrown) { ... }, :
+
+Ces deux fonctions sont des "callbacks", elles sont appelées lorsque la requête AJAX est terminée. La fonction success est appelée si la requête a réussi, et la fonction error est appelée en cas d'erreur.
+Dans la fonction success, on supprime l'élément de la liste dont l'ID est list-item suivi de l'ID de l'article. Dans la fonction error, on affiche le message d'erreur dans la console.
+
+```bash
+<li class="list-group-item d-flex justify-content-between align-items-center" id="list-item-<?php echo $donnees['id']; ?>">
+```
+
+C'est un élément de la liste HTML. Son ID est list-item suivi de l'ID de l'article, ce qui lui permet d'être supprimé lorsque l'article est supprimé.
+
+```bash
+ <a href="#" data-id="<?php echo $article['id']; ?>" class="btn btn-danger delete-btn">Supprimer</a> 
+ ```
+
+C'est le bouton qui, lorsqu'il est cliqué, déclenche la suppression de l'article correspondant. Il a un attribut data-id qui contient l'ID de l'article, et une classe delete-btn qui est utilisée pour attacher l'événement de clic.
+
+Si on supprime un article en attente d'approbation, il disparaîtra de la liste d'articles.
+
+![Screenshot du Dashboard](/espace_admin/img_maquette/bashboard4.png)
+
 ## Docker
 
 Création des images MySQL, PHPMYADMIN
@@ -404,3 +490,25 @@ Start the server
 **Config:** Docker
 
 **Design:** Figma
+
+
+
+
+
+Gestionnaire d'événements avec Calendrier
+Ce projet est une application web qui permet aux utilisateurs de créer et de gérer des événements à partir d'un calendrier interactif. Il utilise PHP pour le côté serveur, MySQL pour la base de données et JavaScript pour l'interactivité côté client.
+
+Fonctionnalités
+Calendrier interactif
+Le calendrier interactif affiche le mois actuel avec tous les jours. Il met en évidence les jours où un événement est programmé. L'utilisateur peut cliquer sur n'importe quel jour pour voir plus d'informations sur les événements de ce jour, ou pour créer un nouvel événement.
+
+Création d'événements
+En cliquant sur un jour dans le calendrier, l'utilisateur est redirigé vers un formulaire pour créer un nouvel événement. Ce formulaire recueille des informations sur l'événement, y compris le titre, le contenu, l'heure, la catégorie et la date. L'utilisateur peut soumettre le formulaire pour créer l'événement. Chaque événement est associé à l'utilisateur qui l'a créé.
+
+Une fois l'événement créé, il est ajouté à la base de données et apparaît dans le calendrier sur le jour correspondant. Les événements sont numérotés en fonction de l'ordre dans lequel ils ont été créés par chaque utilisateur.
+
+Mise à jour du calendrier
+Le calendrier est mis à jour automatiquement toutes les 60 secondes pour refléter les derniers événements ajoutés à la base de données.
+
+Installation et Utilisation
+(Pour cette section, ajoutez des instructions spécifiques à votre projet sur la façon de l'installer et de l'utiliser. Cela pourrait inclure des informations sur la configuration de la base de données, l'installation des dépendances PHP, l'exécution du serveur, etc.)

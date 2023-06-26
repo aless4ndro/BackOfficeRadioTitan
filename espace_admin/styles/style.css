@@ -3,21 +3,38 @@
 }
 
 .navbar {
-    background: linear-gradient(to right, #0e335d 0%,#2989d8 50%,#207cca 51%,#7db9e8 100%);
+    background: linear-gradient(to right, rgba(14,51,93,0.8) 0%,rgba(41,137,216,0.8) 33%,rgba(32,124,202,0.8) 66%,rgba(125,185,232,0.8) 100%);
     padding: .5rem 1rem;
+    margin-bottom: 2rem;
 }
+
+
 
 .navbar-nav .nav-link {
     color: #fff !important;
     font-size: 1.2rem;
 }
 
+body {
+    display: flex;
+    flex-direction: column; /* rend le contenu principal et le pied de page comme des éléments flexibles verticaux */
+    min-height: 100vh; /* assure que le corps prend au moins toute la hauteur de la fenêtre */
+}
+
 .footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
+    margin-top: auto; /* pousse le pied de page vers le bas */
     background-color: lightgray;
     text-align: center;
     padding: 10px;
-  }
+}
+
+.form-groupB {
+    margin-bottom: 30px;
+    margin-top: 5px;
+}
+
+h2 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}

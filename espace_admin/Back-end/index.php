@@ -36,17 +36,10 @@ if (isset($_SESSION['pseudo'])) {
   <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
-
-
-  <!-- endinject -->
-  <!-- Plugin css for this page -->
-  <!-- End plugin css for this page -->
-  <!-- inject:css -->
-  <!-- endinject -->
-  <!-- Layout styles -->
   <link rel="stylesheet" href="assets/css/style.css">
   <!-- End layout styles -->
   <link rel="shortcut icon" href="assets/images/favicon.ico" />
+
 </head>
 
 <body>
@@ -237,7 +230,7 @@ if (isset($_SESSION['pseudo'])) {
                   ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                       <?= htmlspecialchars($donnees['pseudo']); ?> (<?= htmlspecialchars($donnees['role']); ?>)
-                      <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin') { ?>
+                      <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin' && $_SESSION['id'] != $donnees['id']) { ?>
                         <a href="/espace_admin/delete.php?id=<?php echo $donnees['id']; ?>" class="badge badge-danger badge-pill">
                           <i class="fas fa-trash-alt mr-3"></i>
                         </a>
@@ -261,12 +254,25 @@ if (isset($_SESSION['pseudo'])) {
                   while ($donnees = $req->fetch()) {
                   ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                      <?= htmlspecialchars($donnees['titre']); ?>
-                      <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin') { ?>
-                        <a href="/espace_admin/supprime_article.php?id=<?php echo $donnees['id']; ?>" class="badge badge-danger badge-pill">
-                          <i class="fas fa-trash-alt mr-3"></i>
-                        </a>
-                      <?php } ?>
+                      <div>
+                        <!-- Le titre de l'article -->
+                        <span><?= htmlspecialchars($donnees['titre']); ?></span>
+                      </div>
+                      <div id="icons" class="ml-auto">
+                        <!-- L'icône de l'état de l'article -->
+                        <?php if ($donnees['is_approved'] == 1) : ?>
+                          <i class="fas fa-check-circle text-success"></i>
+                        <?php else : ?>
+                          <i class="fas fa-hourglass-half text-warning"></i>
+                        <?php endif; ?>
+
+                        <!-- Le bouton de suppression de l'article -->
+                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') { ?>
+                          <a href="/espace_admin/supprime_article.php?id=<?php echo $donnees['id']; ?>" class="badge badge-danger badge-pill ml-2">
+                            <i class="fas fa-trash-alt"></i>
+                          </a>
+                        <?php } ?>
+                      </div>
                     </li>
                   <?php
                   }
@@ -275,6 +281,7 @@ if (isset($_SESSION['pseudo'])) {
               </div>
             </div>
           </div>
+
           <!-- Voir les podcast -->
           <div class="col-md-4 stretch-card grid-margin">
             <div class="card bg-gradient-success card-img-holder text-white">
@@ -287,7 +294,7 @@ if (isset($_SESSION['pseudo'])) {
                   ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                       <?= htmlspecialchars($donnees['title']); ?>
-                      <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin') { ?>
+                      <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') { ?>
                         <a href="/espace_admin/delete_podcast.php?id=<?php echo $donnees['id']; ?>" class="badge badge-danger badge-pill">
                           <i class="fas fa-trash-alt mr-3"></i>
                         </a>
@@ -312,7 +319,7 @@ if (isset($_SESSION['pseudo'])) {
                   ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                       <?= htmlspecialchars($donnees['title']); ?>
-                      <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin') { ?>
+                      <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') { ?>
                         <a href="/espace_admin/delete_albums.php?id=<?php echo $donnees['id']; ?>" class="badge badge-danger badge-pill">
                           <i class="fas fa-trash-alt mr-3"></i>
                         </a>
@@ -336,7 +343,7 @@ if (isset($_SESSION['pseudo'])) {
                   ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                       <?= htmlspecialchars($donnees['nom_categorie']); ?>
-                      <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin') { ?>
+                      <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') { ?>
                         <a href="/espace_admin/delete_categorie.php?id_categorie=<?php echo $donnees['id_categorie']; ?>" class="badge badge-danger badge-pill">
                           <i class="fas fa-trash-alt mr-3"></i>
                         </a>
@@ -353,7 +360,6 @@ if (isset($_SESSION['pseudo'])) {
 
         <?php
 
-
         $articles = [];
 
         // If the user is an admin, display all unapproved articles
@@ -366,102 +372,125 @@ if (isset($_SESSION['pseudo'])) {
           $articles = $req->fetchAll();
         }
 
+        if (isset($_SESSION['message'])) { // If a message is set, display it
+          echo "<p>" . htmlspecialchars($_SESSION['message']) . "</p>";
+          $_SESSION['message'] = '';
+        }
+
         ?>
         <div class="row">
           <div class="col-md-7 grid-margin stretch-card">
             <div class="card">
               <div class="card-body">
                 <h4 class="card-title">Articles en attente d'approbation</h4>
-                  <div class="d-flex justify-content-center">
-                    <div class="spinner-border" role="status">
-                      <span class="sr-only">Loading...</span>
-                    </div>
-              </div>
-              
-              
-              <?php foreach ($articles as $article) : ?>
-                <div class="article">
-                  <h5><?php echo "Titre : " . htmlspecialchars($article['titre']); ?></h5>
-                  <p><?php print "Contenu : " . $article['contenu']; ?></p>
-                  <p><?php echo "Auteur : " . htmlspecialchars($article['pseudo']); ?></p>
-                  <a href="/espace_admin/publier_article.php?id=<?php echo $article['id']; ?>" class="btn btn-success">Approuver</a>
-                  <a href="/espace_admin/supprime_article.php?id=<?php echo $article['id']; ?>" class="btn btn-danger">Supprimer</a>
-                </div>
-                <hr>
-              <?php endforeach; ?>
+                <?php foreach ($articles as $article) : ?>
+                  <div class="article">
+                    <h5><?php echo "Titre : " . htmlspecialchars($article['titre']); ?></h5>
+                    <p><?php print "Contenu : " . $article['contenu']; ?></p>
+                    <p><?php echo "Auteur : " . htmlspecialchars($article['pseudo']); ?></p>
+                    <!-- Ici, on affiche l'icône en fonction de l'état de l'article -->
+                    <a href="/espace_admin/validation_admin_articles.php?id=<?php echo $article['id']; ?>" class="btn btn-success">Approuver</a>
+                    <a href="/espace_admin/supprime_article.php?id=<?php echo $article['id']; ?>" class="btn btn-danger">Supprimer</a>
+                  </div>
+                  <hr>
+                <?php endforeach; ?>
 
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-5 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title text-white">Todo</h4>
-              <div class="add-items d-flex">
-                <input type="text" class="form-control todo-list-input" placeholder="What do you need to do today?">
-                <button class="add btn btn-gradient-primary font-weight-bold todo-list-add-btn" id="add-task">Add</button>
+          <!-- Calendar -->
+
+          <div class="col-lg-6 col-md-6 col-sm-8 grid-margin stretch-card">
+            <div class="calendar">
+              <header class="calendar__header">
+                <div class="calendar__month"></div>
+                <div class="calendar__year"></div>
+              </header>
+              <div class="calendar__grid">
+                <div class="calendar__day-names">
+                  <span class="calendar__day-name">S</span>
+                  <span class="calendar__day-name">M</span>
+                  <span class="calendar__day-name">T</span>
+                  <span class="calendar__day-name">W</span>
+                  <span class="calendar__day-name">T</span>
+                  <span class="calendar__day-name">F</span>
+                  <span class="calendar__day-name">S</span>
+                </div>
+                <div class="calendar__day-numbers"></div>
               </div>
-              <div class="list-wrapper">
-                <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
-                  <li>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="checkbox" type="checkbox"> Meeting with Alisa </label>
-                    </div>
-                    <i class="remove mdi mdi-close-circle-outline"></i>
-                  </li>
-                  <li class="completed">
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="checkbox" type="checkbox" checked> Call John </label>
-                    </div>
-                    <i class="remove mdi mdi-close-circle-outline"></i>
-                  </li>
-                  <li>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="checkbox" type="checkbox"> Create invoice </label>
-                    </div>
-                    <i class="remove mdi mdi-close-circle-outline"></i>
-                  </li>
-                  <li>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="checkbox" type="checkbox"> Print Statements </label>
-                    </div>
-                    <i class="remove mdi mdi-close-circle-outline"></i>
-                  </li>
-                  <li class="completed">
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="checkbox" type="checkbox" checked> Prepare for presentation </label>
-                    </div>
-                    <i class="remove mdi mdi-close-circle-outline"></i>
-                  </li>
-                  <li>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="checkbox" type="checkbox"> Pick up kids from school </label>
-                    </div>
-                    <i class="remove mdi mdi-close-circle-outline"></i>
-                  </li>
-                </ul>
+            </div>
+          </div>
+
+
+          <div class="col-md-5 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title text-white">Todo</h4>
+                <div class="add-items d-flex">
+                  <input type="text" class="form-control todo-list-input" placeholder="What do you need to do today?">
+                  <button class="add btn btn-gradient-primary font-weight-bold todo-list-add-btn" id="add-task">Add</button>
+                </div>
+                <div class="list-wrapper">
+                  <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
+                    <li>
+                      <div class="form-check">
+                        <label class="form-check-label">
+                          <input class="checkbox" type="checkbox"> Meeting with Alisa </label>
+                      </div>
+                      <i class="remove mdi mdi-close-circle-outline"></i>
+                    </li>
+                    <li class="completed">
+                      <div class="form-check">
+                        <label class="form-check-label">
+                          <input class="checkbox" type="checkbox" checked> Call John </label>
+                      </div>
+                      <i class="remove mdi mdi-close-circle-outline"></i>
+                    </li>
+                    <li>
+                      <div class="form-check">
+                        <label class="form-check-label">
+                          <input class="checkbox" type="checkbox"> Create invoice </label>
+                      </div>
+                      <i class="remove mdi mdi-close-circle-outline"></i>
+                    </li>
+                    <li>
+                      <div class="form-check">
+                        <label class="form-check-label">
+                          <input class="checkbox" type="checkbox"> Print Statements </label>
+                      </div>
+                      <i class="remove mdi mdi-close-circle-outline"></i>
+                    </li>
+                    <li class="completed">
+                      <div class="form-check">
+                        <label class="form-check-label">
+                          <input class="checkbox" type="checkbox" checked> Prepare for presentation </label>
+                      </div>
+                      <i class="remove mdi mdi-close-circle-outline"></i>
+                    </li>
+                    <li>
+                      <div class="form-check">
+                        <label class="form-check-label">
+                          <input class="checkbox" type="checkbox"> Pick up kids from school </label>
+                      </div>
+                      <i class="remove mdi mdi-close-circle-outline"></i>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <!-- content-wrapper ends -->
+      <!-- partial:partials/_footer.html -->
+      <footer class="footer">
+        <div class="container-fluid d-flex justify-content-between">
+          <span class="text-muted d-block text-center text-sm-start d-sm-inline-block">Copyright © Altameos 2023</span>
+        </div>
+      </footer>
+      <!-- partial -->
     </div>
-    <!-- content-wrapper ends -->
-    <!-- partial:partials/_footer.html -->
-    <footer class="footer">
-      <div class="container-fluid d-flex justify-content-between">
-        <span class="text-muted d-block text-center text-sm-start d-sm-inline-block">Copyright © Altameos 2023</span>
-      </div>
-    </footer>
-    <!-- partial -->
-  </div>
-  <!-- main-panel ends -->
+    <!-- main-panel ends -->
   </div>
   <!-- page-body-wrapper ends -->
   </div>
@@ -482,6 +511,11 @@ if (isset($_SESSION['pseudo'])) {
   <script src="assets/js/dashboard.js"></script>
   <script src="assets/js/todolist.js"></script>
   <!-- End custom js for this page -->
+  <script src="assets/js/ajax.js"></script>
+  <script src="assets/js/calendary.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
 </body>
 
 </html>
