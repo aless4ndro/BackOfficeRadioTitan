@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : mysql
--- Généré le : lun. 19 juin 2023 à 19:53
+-- Généré le : sam. 01 juil. 2023 à 13:30
 -- Version du serveur : 8.0.33
 -- Version de PHP : 8.1.17
 
@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 -- Structure de la table `albums`
 --
 
-CREATE TABLE `albums` (
+CREATE TABLE `audio` (
   `id` int NOT NULL,
   `title` varchar(255) NOT NULL,
   `file_path` varchar(255) NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE `albums` (
 --
 
 INSERT INTO `albums` (`id`, `title`, `file_path`, `date`, `description`, `code_color`, `img_illustration`, `id_categorie`) VALUES
-(3, 'Soleil', 'upload_albums/64904a1bbf5849.93802464.mp3', '2023-06-19 00:00:00', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, ', '#cd2d2d', 'upload_images/64904a1bbfc469.56820130.png', 2);
+(4, 'Titan', 'upload_albums/6491aed15a3b22.34141841.mp3', '2023-06-20 00:00:00', 'Lorem ipsum doler sit', '#df3030', 'upload_images/6491aed15a68e2.99858735.png', 2);
 
 -- --------------------------------------------------------
 
@@ -55,17 +55,21 @@ CREATE TABLE `articles` (
   `id` int NOT NULL,
   `titre` varchar(255) NOT NULL,
   `contenu` text NOT NULL,
-  `id_categorie` int DEFAULT NULL
+  `id_categorie` int DEFAULT NULL,
+  `is_approved` int NOT NULL DEFAULT '0',
+  `id_membre` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Déchargement des données de la table `articles`
 --
 
-INSERT INTO `articles` (`id`, `titre`, `contenu`, `id_categorie`) VALUES
-(4, 'zorro le beu', 'fdqqd', 1),
-(8, 'Chill', 'lemr uity roro lopus', 3),
-(10, 'hello modif', '&lt;p&gt;&lt;span style=&quot;color: #001234; font-family: Mulish, sans-serif; font-size: 16px; background-color: #f5f7ff;&quot;&gt;CKEditor is a WYSIWYG HTML editor that can fit a wide range of use cases: from Word-like documents with large toolbars to simple toolbars with a limited set of features used for emails or instant messaging.&lt;/span&gt;&lt;/p&gt;', 3);
+INSERT INTO `articles` (`id`, `titre`, `contenu`, `id_categorie`, `is_approved`, `id_membre`) VALUES
+(35, 'Plage', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam et ultricies ante. Morbi placerat nunc at tortor elementum, eu blandit lorem tempor. Mauris interdum mattis massa quis tristique. Sed sollicitudin eleifend dui et consequat. Sed elementum at neque at rutrum. Nullam quis enim volutpat, pharetra quam sed, porta metus. Ut lacus magna, commodo quis eleifend finibus, gravida id urna. Suspendisse nec nibh turpis. Aliquam erat volutpat. Suspendisse libero nisi, facilisis ullamcorper mollis in, ornare sit amet justo. Mauris at nisi et neque condimentum gravida non eget tortor. Quisque posuere vitae erat vel rutrum. Cras elementum augue sed massa vestibulum, rhoncus imperdiet felis blandit. Suspendisse ornare dui nec ante convallis pretium.', 1, 1, 39),
+(47, 'faucibus magna.', 'Etiam molestie elit euismod pharetra convallis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut et sapien imperdiet libero iaculis elementum id a arcu. Nullam vel leo egestas, tristique neque in, faucibus magna.\r\n\r\n \r\n', 1, 1, 39),
+(50, 'Aliquam facilisis', 'Mauris viverra nunc eget nulla congue maximus. Proin ut metus risus. Sed quam massa, auctor ac molestie vel, dapibus id odio. Curabitur venenatis cursus sollicitudin. Mauris accumsan ultricies suscipit. In et tincidunt enim. Quisque massa arcu, sollicitudin ut nisl ac, fringilla gravida mi. Suspendisse mattis ac elit at maximus. Suspendisse bibendum non sem eget pretium.', 1, 1, 39),
+(51, 'Lorem ipsum', 'dolor sit amet, consectetur adipiscing elit. Aliquam facilisis blandit urna congue interdum. Cras ut ex laoreet, mattis ligula a, mollis dui. Suspendisse consectetur rhoncus erat, non sodales nisi aliquam sit amet. In a ligula vel erat aliquet tempus. Curabitur at volutpat tellus. Nulla facilisi. Maecenas a lorem non massa venenatis fermentum quis nec nulla. Suspendisse egestas dui vitae nulla accumsan, et elementum urna consectetur. Sed luctus massa eu felis volutpat, eget lacinia mi rhoncus.', 1, 1, 39),
+(52, 'Donec consectetur', 'luctus arcu. Sed cursus elementum ipsum, nec accumsan nisl tincidunt ac. Phasellus vel lacinia ipsum. Ut sed elementum nibh. In molestie tincidunt augue, hendrerit viverra arcu ultrices a. Proin tempus, libero quis blandit pellentesque, urna nisl venenatis magna, fringilla tempus felis leo eget magna. Nullam enim nulla, elementum non lectus sed, gravida aliquam justo. Nullam aliquam suscipit nunc, vel viverra velit. Praesent eget ex arcu.', 1, 0, 39);
 
 -- --------------------------------------------------------
 
@@ -88,107 +92,34 @@ INSERT INTO `categories` (`id_categorie`, `nom_categorie`) VALUES
 (3, 'Podcast'),
 (4, 'Video');
 
-<<<<<<< HEAD
-ALTER TABLE articles
-ADD FOREIGN KEY (id_categorie) REFERENCES categories(id_categorie);
-
-
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Hôte : mysql
--- Généré le : lun. 19 juin 2023 à 19:53
--- Version du serveur : 8.0.33
--- Version de PHP : 8.1.17
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Base de données : `espace_admin_altameos`
---
-
 -- --------------------------------------------------------
 
 --
--- Structure de la table `albums`
+-- Structure de la table `events`
 --
 
-CREATE TABLE `albums` (
-  `id` int NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `file_path` varchar(255) NOT NULL,
-  `date` datetime DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `code_color` varchar(255) DEFAULT NULL,
-  `img_illustration` varchar(255) DEFAULT NULL,
-  `id_categorie` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Déchargement des données de la table `albums`
---
-
-INSERT INTO `albums` (`id`, `title`, `file_path`, `date`, `description`, `code_color`, `img_illustration`, `id_categorie`) VALUES
-(3, 'Soleil', 'upload_albums/64904a1bbf5849.93802464.mp3', '2023-06-19 00:00:00', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, ', '#cd2d2d', 'upload_images/64904a1bbfc469.56820130.png', 2);
-
--- --------------------------------------------------------
-
---
--- Structure de la table `articles`
---
-
-CREATE TABLE `articles` (
+CREATE TABLE `events` (
   `id` int NOT NULL,
   `titre` varchar(255) NOT NULL,
-  `contenu` text NOT NULL,
-  `id_categorie` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Déchargement des données de la table `articles`
---
-
-INSERT INTO `articles` (`id`, `titre`, `contenu`, `id_categorie`) VALUES
-(4, 'zorro le beu', 'fdqqd', 1),
-(8, 'Chill', 'lemr uity roro lopus', 3),
-(10, 'hello modif', '&lt;p&gt;&lt;span style=&quot;color: #001234; font-family: Mulish, sans-serif; font-size: 16px; background-color: #f5f7ff;&quot;&gt;CKEditor is a WYSIWYG HTML editor that can fit a wide range of use cases: from Word-like documents with large toolbars to simple toolbars with a limited set of features used for emails or instant messaging.&lt;/span&gt;&lt;/p&gt;', 3);
-
--- --------------------------------------------------------
-
---
--- Structure de la table `categories`
---
-
-CREATE TABLE `categories` (
-  `id_categorie` int NOT NULL,
-  `nom_categorie` varchar(255) DEFAULT NULL
+  `contenu` text,
+  `heure` time NOT NULL,
+  `date` date DEFAULT NULL,
+  `id_categorie` int DEFAULT NULL,
+  `id_membre` int DEFAULT NULL,
+  `eventNumber` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Déchargement des données de la table `categories`
+-- Déchargement des données de la table `events`
 --
 
-INSERT INTO `categories` (`id_categorie`, `nom_categorie`) VALUES
-(1, 'Article'),
-(2, 'Album'),
-(3, 'Podcast'),
-(4, 'Video');
+INSERT INTO `events` (`id`, `titre`, `contenu`, `heure`, `date`, `id_categorie`, `id_membre`, `eventNumber`) VALUES
+(4, 'hello', 'Various versions have evolved over the years, sometimes, Various versions have evolved over the years', '17:30:00', '1970-01-01', 1, 21, 4),
+(5, 'iekolo', 'fsqesfsf', '16:21:00', '1970-01-01', 1, 21, 5),
+(7, 'zorro le beu', 'gh;hjlk!llm', '21:25:00', '2023-07-28', 1, 21, 7);
 
-=======
->>>>>>> 25111a9a72935f56c12465047c36b9ed71f6c99e
 -- --------------------------------------------------------
 
-INSERT INTO `categories` (`id_categorie`, `nom_categorie`) VALUES
-(1, 'Article')
 --
 -- Structure de la table `membres`
 --
@@ -262,13 +193,22 @@ ALTER TABLE `albums`
 --
 ALTER TABLE `articles`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_categorie` (`id_categorie`);
+  ADD KEY `id_categorie` (`id_categorie`),
+  ADD KEY `id_membre` (`id_membre`);
 
 --
 -- Index pour la table `categories`
 --
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id_categorie`);
+
+--
+-- Index pour la table `events`
+--
+ALTER TABLE `events`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id_membre` (`id_membre`,`eventNumber`),
+  ADD KEY `id_categorie` (`id_categorie`);
 
 --
 -- Index pour la table `membres`
@@ -297,13 +237,19 @@ ALTER TABLE `video`
 -- AUTO_INCREMENT pour la table `albums`
 --
 ALTER TABLE `albums`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `articles`
 --
 ALTER TABLE `articles`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+
+--
+-- AUTO_INCREMENT pour la table `events`
+--
+ALTER TABLE `events`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pour la table `membres`
@@ -337,7 +283,15 @@ ALTER TABLE `albums`
 -- Contraintes pour la table `articles`
 --
 ALTER TABLE `articles`
-  ADD CONSTRAINT `articles_ibfk_1` FOREIGN KEY (`id_categorie`) REFERENCES `categories` (`id_categorie`);
+  ADD CONSTRAINT `articles_ibfk_1` FOREIGN KEY (`id_categorie`) REFERENCES `categories` (`id_categorie`),
+  ADD CONSTRAINT `articles_ibfk_2` FOREIGN KEY (`id_membre`) REFERENCES `membres` (`id`);
+
+--
+-- Contraintes pour la table `events`
+--
+ALTER TABLE `events`
+  ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`id_categorie`) REFERENCES `categories` (`id_categorie`),
+  ADD CONSTRAINT `events_ibfk_2` FOREIGN KEY (`id_membre`) REFERENCES `membres` (`id`);
 
 --
 -- Contraintes pour la table `podcast`
@@ -349,15 +303,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-CREATE TABLE events(
-    id INT NOT NULL AUTO_INCREMENT,
-    titre VARCHAR(255) NOT NULL,
-    contenu TEXT,
-    heure TIME NOT NULL,
-    date DATETIME,
-    id_categorie INT,
-    FOREIGN KEY (id_categorie) REFERENCES categories(id_categorie),
-    PRIMARY KEY(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-

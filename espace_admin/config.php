@@ -1,5 +1,5 @@
 <?php
-$servername = "localhost";
+$servername = "mysql";
 $username = "root";
 $password = "my-secret-pw";
 $dbname = "espace_admin_altameos";
@@ -11,4 +11,5 @@ try {
 } catch (PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
 }
+
 ?>

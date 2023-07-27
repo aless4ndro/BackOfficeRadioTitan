@@ -22,6 +22,8 @@ Debeug:
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+$error_file = fopen("errors.txt", "w"); //qui creer un fichier avec les erreurs
 ```
 
 ![Screenshot du Dashboard](/espace_admin/img_maquette/dashboard.png)
@@ -60,6 +62,30 @@ try {
 }
 ?>
 ```
+Table audio colonne position et lecteur
+
+En utilisant des multiples de 10 pour les positions, vous pouvez facilement insérer de nouvelles pistes entre les pistes existantes sans avoir à réorganiser toutes les positions. Par exemple, si vous avez des pistes aux positions 10, 20 et 30 et que vous voulez insérer une nouvelle piste entre les pistes aux positions 20 et 30, vous pouvez simplement donner à la nouvelle piste une position de 25.
+
+Dans le BO creation_piste.php
+Quand cette case à cocher est modifiée (soit cochée, soit décochée), cela doit déclencher une requête à votre serveur pour mettre à jour la valeur de lecteur pour cette piste dans la base de données. Si la case est cochée, lecteur doit être mis à jour à 1. Si la case est décochée, lecteur doit être mis à jour à 0.
+
+le lecteur est un bool 1=true 0=false qui correspand a ajouter si coché ou pas ajouter si pas coché
+
+```bash
+UPDATE audio
+SET position = CASE id
+    WHEN 1 THEN 10
+    WHEN 2 THEN 20
+    WHEN 3 THEN 30
+    END,
+lecteur = true
+WHERE id IN (1, 2, 3);
+
+donner la position aux audios
+SET @pos := 0;
+UPDATE audio SET position = (@pos := @pos + 10), lecteur = 0;
+
+```
 
 ## Ajout d'une clé étrangère à la table articles
 
@@ -95,6 +121,23 @@ foreach($articles as $article){
 ```
 
 ![Screenshot du Dashboard](/espace_admin/img_maquette/bdd.png)
+
+## Modèle Conceptuel des Données
+
+![Screenshot du Dashboard](/espace_admin/img_maquette/mcd.png)
+
+Membres : Cette table stocke les informations des utilisateurs. Chaque membre a un ID unique. Les membres peuvent écrire plusieurs articles et organiser plusieurs événements, indiquant une relation un-à-plusieurs avec les tables articles et évents.
+
+Catégories : Cette table stocke différentes catégories. Chaque catégorie a un ID unique. Une catégorie peut être liée à plusieurs albums, articles, événements et podcasts, indiquant une relation un-à-plusieurs avec ces tables.
+
+Albums : Cette table contient des informations sur différents albums. Chaque album a un ID unique et une clé étrangère id_categorie, ce qui signifie qu'un album est associé à une et une seule catégorie.
+
+Articles : Cette table contient des informations sur différents articles. Chaque article est lié à un seul membre et à une seule catégorie, mais un membre peut écrire plusieurs articles et une catégorie peut avoir plusieurs articles.
+
+Events : Cette table contient des informations sur différents événements. Chaque événement est lié à un seul membre et à une seule catégorie, mais un membre peut organiser plusieurs événements et une catégorie peut avoir plusieurs événements.
+
+Podcast : Cette table contient des informations sur différents podcasts. Chaque podcast est lié à une seule catégorie, mais une catégorie peut avoir plusieurs podcasts.
+
 
 ## Color Reference
 
@@ -325,6 +368,19 @@ Sur Ubuntu/Debian :
 
 ```bash
 sudo apt-get install php-gd
+
+docker exec -it BackOfficeRadioTitan /bin/bash
+
+
+RUN apt-get update && \
+    apt-get install -y \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libpng-dev \
+        zlib1g-dev && \
+    docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    docker-php-ext-install gd pdo_mysql
+
 ```
 
 ![Screenshot du Dashboard](/espace_admin/img_maquette/captcha.png)

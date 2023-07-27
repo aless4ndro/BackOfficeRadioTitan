@@ -41,10 +41,10 @@ for (i = 1; i <= daysInMonth; i++) {// boucle qui va de 1 au nombre de jours dan
 }
 document.querySelectorAll('.calendar__day-number').forEach(day => {
     day.addEventListener('click', () => {
-        const dayFormatted = day.innerText.padStart(2, '0');
+        const dayFormatted = day.innerText.padStart(2, '0');// padStart(2, '0') ajoute un 0 devant le jour si le jour est inférieur à 10
         const monthFormatted = (currentMonth + 1).toString().padStart(2, '0');
         const date = `${currentYear}-${monthFormatted}-${dayFormatted}`;
-        window.location.href = `/espace_admin/createEvent.php?date=${date}`;  
+        window.location.href = `/espace_admin/createEvent.php?date=${date}`;  // ajoute la date au lien
     });
 });
 

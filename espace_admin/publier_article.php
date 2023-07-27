@@ -1,8 +1,9 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-session_start();
+
+if(session_status() == PHP_SESSION_NONE){
+    // Si aucune session n'est active, on la démarre
+    session_start();
+}
 include('config.php');
 
 if (!isset($_SESSION['pseudo'])) {
@@ -27,7 +28,7 @@ if (isset($_POST['valider'])) {
     $config->set('HTML.AllowedAttributes', 'img.src', '*style');
     $purifier = new HTMLPurifier($config);
     $contenu = $purifier->purify($contenu);
-    
+
 
 
     $is_approved = $_SESSION['role'] == 'admin' ? 1 : 0;
@@ -51,9 +52,6 @@ if (isset($_POST['valider'])) {
     }
 }
 
-include('./include/header.php');
-
-
 //Voici ce que fait le code:
 // Il démarre une session PHP et inclut votre fichier de configuration.
 // Il vérifie si l'utilisateur est connecté en vérifiant si $_SESSION['pseudo'] est défini. Si ce n'est pas le cas, il redirige l'utilisateur vers la page de connexion.
@@ -70,7 +68,11 @@ include('./include/header.php');
 ?>
 
 
-
+<?php
+    include('./include/header.php');
+    include('./include_sidebar/index.php');
+    include('./include_breadcrump/index.php') 
+?>
 
 <head>
     <title>Publier un Article</title>
@@ -109,4 +111,6 @@ include('./include/header.php');
             <a href="./Back-end/index.php" class="btn btn-secondary">Retour</a>
         </form>
     </div>
+    <br>
+    <br>
     <?php include('./include/footer.php') ?>

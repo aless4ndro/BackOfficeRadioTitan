@@ -24,7 +24,7 @@ if (isset($_POST['valider'])) {
                 $_SESSION['pseudo'] = $pseudo_saisi;
                 $_SESSION['role'] = $user['role'];
                 $_SESSION['id'] = $user['id'];
-                header('Location: /espace_admin/Back-end/index.php');
+                header('Location: /Back-end/index.php');
                 exit;
             } else {
                 echo "Mauvais pseudo ou mot de passe";

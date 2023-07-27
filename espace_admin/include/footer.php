@@ -1,13 +1,41 @@
-<!--Footer-->
+<!-- partial:partials/_footer.html -->
+<footer class="footer">
+  <div class="container-fluid d-flex justify-content-between">
+    <span class="text-muted d-block text-center text-sm-start d-sm-inline-block">Copyright © Altameos 2023</span>
+  </div>
+</footer>
+<!-- partial -->
+</div>
+<!-- main-panel ends -->
+</div>
+<!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+<!-- plugins:js -->
+<script src="<?php echo $pathToBackend; ?>assets/vendors/js/vendor.bundle.base.js"></script>
+<!-- endinject -->
+<!-- Plugin js for this page -->
+<script src="<?php echo $pathToBackend; ?>assets/vendors/chart.js/Chart.min.js"></script>
+<script src="<?php echo $pathToBackend; ?>assets/js/jquery.cookie.js" type="text/javascript"></script>
+<!-- End plugin js for this page -->
+<!-- inject:js -->
+<script src="<?php echo $pathToBackend; ?>assets/js/off-canvas.js"></script>
+<script src="<?php echo $pathToBackend; ?>assets/js/hoverable-collapse.js"></script>
+<script src="<?php echo $pathToBackend; ?>assets/js/misc.js"></script>
+<!-- endinject -->
+<!-- Custom js for this page -->
+<script src="<?php echo $pathToBackend; ?>assets/js/dashboard.js"></script>
+<script src="<?php echo $pathToBackend; ?>assets/js/todolist.js"></script>
+<!-- End custom js for this page -->
+<script src="<?php echo $pathToBackend; ?>assets/js/ajax.js"></script>
+<script src="<?php echo $pathToBackend; ?>assets/js/calendary.js"></script>
 
-<footer class="footer mt-auto py-3 bg-light">
-    <div class="container">
-        <span class="text-muted">© Altameos 2023</span>
-    </div>
-    <!-- Optional JavaScript; choose one of the two! -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
-    </footer>
-    </body>
+<!-- MDB -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
 
-    </html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+</body>
+
+</html>

@@ -1,7 +1,10 @@
 <?php
-
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    // Si aucune session n'est active, on la démarre
+    session_start();
+}
 include('config.php');
+
 if (!$_SESSION['pseudo']) {
     header('Location: connexion.php');
 }
@@ -44,59 +47,112 @@ if (isset($_POST['submit'])) {
     }
 }
 //include — Inclut et exécute le fichier spécifié en argument
-include('./include/header.php');
 ?>
 
-    <div class="container mt-5">
-        <form method="POST" action="upload_podcast.php" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="podcast_file" class="form-label">Podcast File:</label>
-                <input type="file" name="podcast_file" id="podcast_file" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label for="podcast_title" class="form-label">Podcast Title:</label>
-                <input type="text" name="podcast_title" id="podcast_title" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label for="rubrique" class="form-label">Rubrique:</label>
-                <input type="text" name="rubrique" id="rubrique" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label for="emission" class="form-label">Emission:</label>
-                <input type="text" name="emission" id="emission" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label for="intervue" class="form-label">Intervue:</label>
-                <textarea name="intervue" id="intervue" class="form-control"></textarea>
-            </div>
-            <select name="id_categorie">
-            <?php
-            $categories = $conn->query("SELECT * FROM categories");
-            while ($categorie = $categories->fetch()) {
-                echo "<option value='" . $categorie['id_categorie'] . "'>" . $categorie['nom_categorie'] . "</option>";
-            }
-            ?>
+<?php
+include('./include/header.php');
+include('./include_sidebar/index.php');
+include('./include_breadcrump/index.php');
+?>
 
-            <br>
-            <input type="submit" name="submit" value="Upload" class="btn btn-primary">
+<section class="vh-100 px-3 px-md-5 mx-auto" style="background-color: #eee;">
+    <div class="container-fluid h-100">
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-12 col-xl-11">
+                <!-- Supprimer ou réduire la marge supérieure négative -->
+                <div class="card text-black" style="border-radius: 25px;">
+                    <div class="card-body p-md-5">
+                        <div class="row justify-content-center">
+                            <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
-            <?php
-            $req = $conn->query('SELECT * FROM podcast');
-            while ($donnees = $req->fetch()) {
-                echo '<div class="card mb-4">';
-                echo '<div class="card-body">';
-                echo '<h5 class="card-title">' . $donnees['title'] . '</h5>';
-                echo '<p class="card-text">Rubrique: ' . $donnees['rubrique'] . '</p>';
-                echo '<p class="card-text">Emission: ' . $donnees['emission'] . '</p>';
-                echo '<audio controls>';
-                echo '<source src="' . $donnees['file_path'] . '" type="audio/mpeg">';
-                echo '</audio>';
-                echo '</div>';
-                echo '</div>';
-            }
-            ?>
-        </form>
+                                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Upload Podcast</p>
+
+                                <form method="POST" action="upload_podcast.php" enctype="multipart/form-data" class="mx-1 mx-md-4">
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                    <i class="fas fa-podcast fa-lg me-3 fa-fw"></i>
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label for="podcast_file" class="form-label"></label>
+                                            <input type="file" name="podcast_file" id="podcast_file" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                    <i class="fas fa-heading fa-lg me-3 fa-fw"></i>
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label for="podcast_title" class="form-label">Titre</label>
+                                            <input type="text" name="podcast_title" id="podcast_title" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                    <i class="fas fa-bookmark fa-lg me-3 fa-fw"></i>
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label for="rubrique" class="form-label">Rubrique</label>
+                                            <input type="text" name="rubrique" id="rubrique" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                    <i class="fas fa-broadcast-tower fa-lg me-3 fa-fw"></i>
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label for="emission" class="form-label">Emission</label>
+                                            <input type="text" name="emission" id="emission" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                    <i class="fas fa-microphone fa-lg me-3 fa-fw"></i>
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label for="intervue" class="form-label">Intervue</label>
+                                            <textarea name="intervue" id="intervue" class="form-control"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <select name="id_categorie">
+                                        <?php
+                                        $categories = $conn->query("SELECT * FROM categories");
+                                        while ($categorie = $categories->fetch()) {
+                                            echo "<option value='" . $categorie['id_categorie'] . "'>" . $categorie['nom_categorie'] . "</option>";
+                                        }
+                                        ?>
+
+                                        <br>
+                                        
+                                        <?php
+                                        $req = $conn->query('SELECT * FROM podcast');
+                                        while ($donnees = $req->fetch()) {
+                                            echo '<div class="card mb-4">';
+                                            echo '<div class="card-body">';
+                                            echo '<h5 class="card-title">' . $donnees['title'] . '</h5>';
+                                            echo '<p class="card-text">Rubrique: ' . $donnees['rubrique'] . '</p>';
+                                            echo '<p class="card-text">Emission: ' . $donnees['emission'] . '</p>';
+                                            echo '<audio controls>';
+                                            echo '<source src="' . $donnees['file_path'] . '" type="audio/mpeg">';
+                                            echo '</audio>';
+                                            echo '</div>';
+                                            echo '</div>';
+                                        }
+                                        ?>
+                                    </select>
+
+                                    <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                            <button type="submit" name="submit" class="btn btn-primary">Créer</button>
+                                        </div>
+                                </form>
+
+                            </div>
+                            <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+                                <img src="https://images.unsplash.com/photo-1485579149621-3123dd979885?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1631&q=80" class="img-fluid" alt="Sample image" style="margin-top: -50px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    </div>
+</section>
 <?php include('./include/footer.php'); ?>
 
 

@@ -1,14 +1,13 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-session_start();
+
+if(session_status() == PHP_SESSION_NONE){
+    // Si aucune session n'est active, on la démarre
+    session_start();
+}
+
 include('config.php');
 
-if (!isset($_SESSION['pseudo'])) {
-    header('Location: connexion.php');
-    exit();
-}
+
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -23,7 +22,7 @@ if (isset($_POST['valider'])) {
     $titre = htmlspecialchars($_POST['titre']);
     $contenu = $_POST['contenu'];
     $heure = htmlspecialchars($_POST['heure']);
-    $id_categorie = htmlspecialchars($_POST['id_categorie']);
+    $id_categorie = htmlspecialchars($_POST['id_categorie']);// récupérer l'id de la catégorie
     $date = $_POST['date'];
 
 
@@ -37,7 +36,7 @@ if (isset($_POST['valider'])) {
 
     $is_approved = $_SESSION['role'] == 'admin' ? 1 : 0; //si l'utilisateur est un admin, alors il peut publier directement l'article
 
-    if (!empty($titre) && !empty($contenu) && !empty($heure) && !empty($id_categorie) && !empty($date)) {
+    if (!empty($titre) && !empty($contenu) && !empty($heure) && !empty($id_categorie) && !empty($date)) {//condition de vérification des champs
         if (!isset($_SESSION['id'])) {
             $_SESSION['message'] = "L'utilisateur n'est pas connecté";
             exit;
@@ -74,7 +73,11 @@ if (isset($_POST['valider'])) {
 
 $date = $_GET['date'] ?? ''; // Ajouté pour récupérer la date depuis l'URL
 
-include('./include/header.php');
+?>
+
+<?php include('./include/header.php');
+include('./include_sidebar/index.php');
+include('./include_breadcrump/index.php');
 ?>
 
 <head>
@@ -166,4 +169,6 @@ include('./include/header.php');
 
         </form>
     </div>
+    <br>
+    <br>
     <?php include('./include/footer.php') ?>
