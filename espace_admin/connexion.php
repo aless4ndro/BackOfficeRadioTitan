@@ -2,30 +2,30 @@
 session_start();
 include('config.php');
 
-if (isset($_POST['valider'])) {
-    if (!empty($_POST['pseudo']) and !empty($_POST['pass']) and !empty($_POST['captcha'])) {
+if (isset($_POST['valider'])) { // Si le bouton "Connexion" est appuyé
+    if (!empty($_POST['pseudo']) and !empty($_POST['pass']) and !empty($_POST['captcha'])) {// Si les champs sont remplis
 
-        $pseudo_saisi = htmlspecialchars($_POST['pseudo']);
+        $pseudo_saisi = htmlspecialchars($_POST['pseudo']);// On sécurise les données rentrées par l'utilisateur
         $password_saisi = htmlspecialchars($_POST['pass']);
         $captcha_user = htmlspecialchars($_POST["captcha"]);
 
-        if ($captcha_user != $_SESSION["captcha"]) {
-            echo "Le CAPTCHA est incorrect !";
-            exit;
+        if ($captcha_user != $_SESSION["captcha"]) {// Si le CAPTCHA est incorrect
+            echo "Le CAPTCHA est incorrect !";// On affiche un message d'erreur
+            exit;// On arrête le script
         }
 
         // Interroger la base de données pour l'utilisateur
-        $stmt = $conn->prepare("SELECT * FROM membres WHERE pseudo = ?");
-        $stmt->execute([$pseudo_saisi]);
-        $user = $stmt->fetch();
+        $stmt = $conn->prepare("SELECT * FROM membres WHERE pseudo = ?");// On prépare la requête
+        $stmt->execute([$pseudo_saisi]);// On l'exécute
+        $user = $stmt->fetch();// On récupère les données de l'utilisateur
 
-        if ($user && password_verify($password_saisi, $user['pass'])) {
+        if ($user && password_verify($password_saisi, $user['pass'])) {// Si l'utilisateur existe et que le mot de passe est correct
             // Le pseudo et le mot de passe sont corrects
-                $_SESSION['pseudo'] = $pseudo_saisi;
-                $_SESSION['role'] = $user['role'];
+                $_SESSION['pseudo'] = $pseudo_saisi;// On crée la session
+                $_SESSION['role'] = $user['role'];// On crée la session
                 $_SESSION['id'] = $user['id'];
-                header('Location: /Back-end/index.php');
-                exit;
+                header('Location: /Back-end/index.php');// On redirige l'utilisateur vers la page d'accueil
+                exit;   // On arrête le script
             } else {
                 echo "Mauvais pseudo ou mot de passe";
             }
@@ -59,10 +59,13 @@ if (isset($_POST['valider'])) {
                     <div class="mb-3">
                         <input type="password" name="pass" class="form-control" placeholder="Mot de passe">
                     </div>
+
+                    <!-- Ajouter le champ CAPTCHA -->
                     <div class="mb-3">
                         <img src="captcha.php" class="d-block mx-auto mb-2" alt="CAPTCHA">
                         <input type="text" name="captcha" class="form-control" placeholder="Veuillez entrer le CAPTCHA">
                     </div>
+
                     <div class="mb-3">
                         <input type="submit" name="valider" class="btn btn-primary w-100">
                     </div>

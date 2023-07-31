@@ -4,20 +4,20 @@ include('config.php');
 require('permission_admin.php');
 
 // Vérifie si le paramètre 'id' est défini et non vide
-if(isset($_GET['id']) && trim($_GET['id']) != '') {
-    $getid = $_GET['id'];
+if(isset($_GET['id']) && trim($_GET['id']) != '') {// trim() supprime les espaces en début et fin de chaîne
+    $getid = $_GET['id'];// On récupère l'id de l'article envoyé dans l'URL
 
-    $req = $conn->prepare('SELECT * FROM articles WHERE id = ?');
-    $req->execute(array($getid));
-    if($req->rowCount() == 1) {
-        $donnees = $req->fetch();
-        if(isset($_POST['valider'])) {
-            $titre = htmlspecialchars($_POST['titre']);
-            $contenu = nl2br(htmlspecialchars($_POST['contenu']));
-            if(!empty($titre) AND !empty($contenu)) {
-                $req = $conn->prepare('UPDATE articles SET titre = ?, contenu = ? WHERE id = ?');
-                $req->execute(array($titre, $contenu, $getid));
-                header('Location: articles.php');
+    $req = $conn->prepare('SELECT * FROM articles WHERE id = ?');// On prépare la requête pour vérifier si l'article existe
+    $req->execute(array($getid));// On exécute la requête
+    if($req->rowCount() == 1) {// Si l'article existe
+        $donnees = $req->fetch();// On récupère les données de l'article
+        if(isset($_POST['valider'])) {// Si le formulaire a été envoyé
+            $titre = htmlspecialchars($_POST['titre']);// On récupère les données du formulaire
+            $contenu = nl2br(htmlspecialchars($_POST['contenu']));// nl2br() insère un retour à la ligne HTML (<br /> ou <br>) avant chaque nouvelle ligne
+            if(!empty($titre) AND !empty($contenu)) {// Si les données ne sont pas vides
+                $req = $conn->prepare('UPDATE articles SET titre = ?, contenu = ? WHERE id = ?');// On prépare la requête pour modifier l'article
+                $req->execute(array($titre, $contenu, $getid));// On exécute la requête
+                header('Location: articles.php');// On redirige l'utilisateur vers la page des articles
             } else {
                 echo "Veuillez remplir tous les champs";
             }

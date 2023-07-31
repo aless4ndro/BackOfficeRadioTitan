@@ -5,7 +5,7 @@ require('permission_admin.php');
 
 
 if (isset($_POST['submit'])) { // Si le formulaire est soumis
-  $pseudo = htmlspecialchars($_POST['pseudo']);
+  $pseudo = htmlspecialchars($_POST['pseudo']);// On sécurise les données rentrées par l'utilisateur
   $email = htmlspecialchars($_POST['email']);
   $pass = htmlspecialchars($_POST['pass']);
   $comfirmation_pass = htmlspecialchars($_POST['comfirmation_pass']);
@@ -18,21 +18,21 @@ if (isset($_POST['submit'])) { // Si le formulaire est soumis
   }
 
   if (strlen($pass) < 8) {
-    echo "Le mot de passe doit comporter au moins 8 caractères";
+    echo "Le mot de passe doit comporter au moins 8 caractères";// On vérifie que le mot de passe contient au moins 8 caractères
+    exit;// On arrête le script
+  } elseif (!preg_match("#[0-9]+#", $pass)) {// On vérifie que le mot de passe contient au moins un chiffre
+    echo "Le mot de passe doit contenir au moins un chiffre";// On affiche un message d'erreur
     exit;
-  } elseif (!preg_match("#[0-9]+#", $pass)) {
-    echo "Le mot de passe doit contenir au moins un chiffre";
-    exit;
-  } elseif (!preg_match("#[a-zA-Z]+#", $pass)) {
+  } elseif (!preg_match("#[a-zA-Z]+#", $pass)) {// On vérifie que le mot de passe contient au moins une lettre
     echo "Le mot de passe doit contenir au moins une lettre";
     exit;
-  } elseif (!preg_match("#[A-Z]+#", $pass)) {
+  } elseif (!preg_match("#[A-Z]+#", $pass)) {// On vérifie que le mot de passe contient au moins une lettre majuscule
     echo "Le mot de passe doit contenir au moins une lettre majuscule";
     exit;
-  } elseif (!preg_match("#\W+#", $pass)) {
+  } elseif (!preg_match("#\W+#", $pass)) {// On vérifie que le mot de passe contient au moins un caractère spécial
     echo "Le mot de passe doit contenir au moins un caractère spécial";
     exit;
-  } elseif ($pass != $comfirmation_pass) {
+  } elseif ($pass != $comfirmation_pass) {// On vérifie que les deux mots de passe sont identiques
     echo "Les mots de passe ne correspondent pas";
     exit;
   } else {
@@ -131,8 +131,6 @@ include('./include_breadcrump/index.php');
               <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
                 <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp" class="img-fluid" alt="Sample image" style="margin-top: -50px;">
               </div>
-
-
             </div>
           </div>
         </div>
