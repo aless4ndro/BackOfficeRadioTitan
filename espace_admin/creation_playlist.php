@@ -31,7 +31,7 @@ include('./include_breadcrump/index.php');
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-$(document).ready(function() {
+$(document).ready(function() {// Lorsque le document est prêt...
     // Lorsqu'une case à cocher est modifiée...
     $('#playlist-form input[type=checkbox]').change(function() {
         // Récupère l'ID de la piste audio
