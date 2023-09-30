@@ -48,22 +48,22 @@ if (isset($_POST['valider'])) { // Si le bouton "Connexion" est appuyé
 </head>
 
 <body>
-    <div class="container">
+    <main class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <h2 class="text-center mb-4">Connexion</h2>
                 <form method="POST" action="">
                     <div class="mb-3">
-                        <input type="text" name="pseudo" class="form-control" placeholder="Pseudo">
+                        <input type="text" name="pseudo" class="form-control" placeholder="Pseudo" required>
                     </div>
                     <div class="mb-3">
-                        <input type="password" name="pass" class="form-control" placeholder="Mot de passe">
+                        <input type="password" name="pass" class="form-control" placeholder="Mot de passe" required>
                     </div>
 
                     <!-- Ajouter le champ CAPTCHA -->
                     <div class="mb-3">
                         <img src="captcha.php" class="d-block mx-auto mb-2" alt="CAPTCHA">
-                        <input type="text" name="captcha" class="form-control" placeholder="Veuillez entrer le CAPTCHA">
+                        <input type="text" name="captcha" class="form-control" placeholder="Veuillez entrer le CAPTCHA" required>
                     </div>
 
                     <div class="mb-3">
@@ -72,7 +72,7 @@ if (isset($_POST['valider'])) { // Si le bouton "Connexion" est appuyé
                 </form>
             </div>
         </div>
-    </div>
+ </main>
     
     <!-- Ajouter la référence JS de Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

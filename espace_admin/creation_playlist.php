@@ -4,10 +4,15 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+if (!isset($_SESSION['user_id'])) {
+    header('Location: ../index.php');
+    exit;
+}
+
 include('config.php');
 
 // Récupération de toutes les pistes audio
-$stmt = $conn->prepare("SELECT * FROM audio ORDER BY position ASC");
+$stmt = $conn->prepare("SELECT * FROM audio ORDER BY position ASC");// ORDER BY position ASC
 $stmt->execute();
 $tracks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -22,8 +27,8 @@ include('./include_breadcrump/index.php');
 <form id="playlist-form">
     <?php foreach ($tracks as $track): ?>
         <div>
-            <input type="checkbox" id="track-<?php echo $track['id']; ?>" <?php if ($track['lecteur'] == 1) echo 'checked'; ?> />
-            <label for="track-<?php echo $track['id']; ?>"><?php echo $track['title']; ?></label>
+            <input type="checkbox" id="track-<?php echo $track['id']; ?>" <?php if ($track['lecteur'] == 1) echo 'checked'; ?> /><!-- si la piste est dans la playlist, la case à cocher est cochée -->
+            <label for="track-<?php echo $track['id']; ?>"><?php echo $track['title']; ?></label><!-- affiche le titre de la piste audio -->
         </div>
     <?php endforeach; ?>
 </form>
